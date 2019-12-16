@@ -89,6 +89,45 @@ else if ($_SESSION['type']!='T')
             }
 
             .pagination a:hover:not(.active) {background-color: #ddd;}
+
+            .relative{
+              position: relative;
+              width: 1100px;
+              height: 600px;
+            }
+
+            .absolute-top{
+              position: absolute;
+              top : 0px;
+              right : 100px;
+              width : 800px;
+              height : 100px;
+            }
+
+            .absolute-left{
+              position: absolute;
+              top : 200px;
+              left: 0px;
+              width :550px;
+              height: 100px;
+            }
+
+            .absolute-right{
+              position: absolute;;
+              top : 300px;
+              right: 0px;
+              width :550px;
+              height: 100px;
+            }
+
+            .absolute-bot{
+              position: absolute;
+              bottom: 0px;
+              left :100px;
+              width :800px;
+              height: 100px;
+
+            }
           </style>
 
           </head>
@@ -123,11 +162,11 @@ else if ($_SESSION['type']!='T')
                   <div class="x_content">
                     <div class="col-md-10 col-lg-10 col-sm-7">
                       <!-- Strat Blockquote -->
-                      <blockquote class="blockquote2">
-                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;朋友買了一件衣料，綠色的底子帶白色方格，當她拿給我們看時，一位對圍棋十分感與趣的同學說：</p>
-                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「啊，好像棋盤似的。」</p>
-                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「我看倒有點像稿紙。」我說。</p>
-                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                      <blockquote class="blockquote2 relative" style="background-image: url('bookback.jpeg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+                        <p class="book_content absolute-top">&nbsp;&nbsp;&nbsp;&nbsp;朋友買了一件衣料，綠色的底子帶白色方格，當她拿給我們看時，一位對圍棋十分感與趣的同學說：.......</p>
+                        <p class="book_content absolute-left">&nbsp;&nbsp;&nbsp;&nbsp;「啊，好像棋盤似的。」</p>
+                        <p class="book_content absolute-right">&nbsp;&nbsp;&nbsp;&nbsp;「我看倒有點像稿紙。」我說。</p>
+                        <p class="book_content absolute-bot">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
                       </blockquote>
                       <!-- End Blockquote -->
 
@@ -148,8 +187,8 @@ else if ($_SESSION['type']!='T')
                     <!-- Start pagination-->
                     <div class="pagination">
                       <a href="#">&laquo;</a>
-                      <a class="active" href="#">1</a>
-                      <a href="workspace1.php">2</a>
+                      <a href="workspace.php">1</a>
+                      <a class="active" href="#">2</a>
                       <a href="#">3</a>
                       <a href="#">4</a>
                       <a href="#">5</a>
@@ -237,28 +276,6 @@ else if ($_SESSION['type']!='T')
                         }
                       </script>
                     <!-- End Slide Show -->
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>媒體庫 <small>此處可放入備註、作者等相關資料</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="col-md-10 col-lg-10 col-sm-7">
-                    <!-- Start Audio -->
-                    <p> 課文朗讀 ：</p>
-                    <audio controls>
-                      <source src="mp3-1.mp3" type="audio/mp3">
-                    </audio>
-                    <audio controls="">
-                      <source src="mp3-2.mp3" type="audio/mp3">
-                    </audio>
 
                     </div>
                   </div>
