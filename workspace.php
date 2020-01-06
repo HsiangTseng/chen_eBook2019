@@ -10,9 +10,14 @@ if($_SESSION['username'] == null)
 }
 else if ($_SESSION['type']!='T')
 {
+
     header ('location: IRS_Login.php');
     exit;
 }*/
+?>
+
+<?php
+  $media_word = ["AAA","BBB","CCC","DDDDD"];
 ?>
 <html lang="en">
           <head>
@@ -21,7 +26,7 @@ else if ($_SESSION['type']!='T')
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-        	<link rel="icon" href="images/favicon.ico" type="image/ico" />
+        	 <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
             <title>Chen's IRS | </title>
 
@@ -47,7 +52,7 @@ else if ($_SESSION['type']!='T')
             <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
 
             <!-- Custom Theme Style -->
-            <link href="../build/css/custom.min.css" rel="stylesheet">
+            <link href="../build/css/ebook_custom.min.css" rel="stylesheet">
 
             <!-- JS_SlidShow from w3schools -->
             <link href="../build/css/slideshow.css" rel="stylesheet">
@@ -58,6 +63,16 @@ else if ($_SESSION['type']!='T')
               color: black;
               font-size: 30px;
               font-family: DFKai-sb;
+              word-wrap: break-word;
+              word-break: break-all;
+            }
+
+            .media_content{
+              color: black;
+              font-size: 20px;
+              font-family: DFKai-sb;
+              word-wrap: break-word;
+              word-break: break-all;
             }
 
             .blockquote2{
@@ -67,8 +82,8 @@ else if ($_SESSION['type']!='T')
               color: #666;
               background-color: #FFFFFF;
               padding: 15px;
-              border-left: 5px solid #6CA6CD;
-              border-right: 2px solid #6CA6CD;
+              border-left: 5px solid #008B45;
+              border-right: 2px solid #008B45;
               box-shadow: 2px 2px 15px #ccc;
             }
 
@@ -101,7 +116,6 @@ else if ($_SESSION['type']!='T')
       <div class="main_container">
 
 
-      
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
@@ -114,19 +128,27 @@ else if ($_SESSION['type']!='T')
             <div class="clearfix"></div>
 
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-9">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>課文內容 <small>此處可放入備註、作者等相關資料</small></h2>
+                    <h2><b>課文內容</b> <small>此處可放入備註、作者等相關資料</small></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="x_content" style="max-height:100%;">
                     <div class="col-md-10 col-lg-10 col-sm-7">
                       <!-- Strat Blockquote -->
                       <blockquote class="blockquote2">
                         <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;朋友買了一件衣料，綠色的底子帶白色方格，當她拿給我們看時，一位對圍棋十分感與趣的同學說：</p>
                         <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「啊，好像棋盤似的。」</p>
                         <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「我看倒有點像稿紙。」我說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
+                        <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
                         <p class="book_content">&nbsp;&nbsp;&nbsp;&nbsp;「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。</p>
                       </blockquote>
                       <!-- End Blockquote -->
@@ -136,11 +158,23 @@ else if ($_SESSION['type']!='T')
                     <!-- Start Exercise Block-->
                     <div class="col-md-2 col-lg-2 col-sm-5">
                       <h1><span class="label label-info">課堂練習</span></h1>
-                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">棋盤</a><br>
-                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">稿紙</a><br>
-                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">綠豆糕</a><br>
+                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" onclick='Show_media(0);' style="font-size: 20px; font-family: DFKai-sb;">棋盤</a><br>
+                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" onclick='Show_media(1);' style="font-size: 20px; font-family: DFKai-sb;">稿紙</a><br>
+                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" onclick='Show_media(2);' style="font-size: 20px; font-family: DFKai-sb;">綠豆糕</a><br>
                     </div>
                     <!-- End Exercise Block-->
+                    <script>
+                      function Show_media(index)
+                      {
+                        //conver the php array to javascript array.
+                        <?php
+                          $js_media_content = json_encode($media_word);
+                          echo "var media_content = ".$js_media_content.";\n";
+                        ?>
+                        document.getElementById('media_content').innerHTML=media_content[index];
+                        //alert(a);
+                      }
+                    </script>
 
 
                     <div class="clearfix">
@@ -157,114 +191,53 @@ else if ($_SESSION['type']!='T')
                       <a href="#">&raquo;</a>
                     </div>
                     <!-- End pagination-->
-               
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2><b>補充教材</b><small>此處可放入備註、作者等相關資料</small></h2>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-12 col-lg-12 col-sm-12">
+                    <blockquote class="blockquote2">
+                    <P id="media_content" class="media_content">
+                      「真像一塊塊綠豆糕。」一位外號叫「大食客」的同學緊接著說。
+                    </P>
+                    <img src="large-pic.jpg" style="  width: 100%;height: auto;" />
+                   </blockquote>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>媒體庫 <small>此處可放入備註、作者等相關資料</small></h2>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-10 col-lg-10 col-sm-7">
+                  <!-- Start Audio -->
+                  <p> 課文朗讀 ：</p>
+                  <audio controls>
+                    <source src="mp3-1.mp3" type="audio/mp3">
+                  </audio>
+                  <audio controls="">
+                    <source src="mp3-2.mp3" type="audio/mp3">
+                  </audio>
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="row">
-              <div class="col-md-6">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>媒體庫 <small>此處可放入備註、作者等相關資料</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="col-md-10 col-lg-10 col-sm-7">
-                    <!-- Start Slide Show -->
-                      <!-- Slideshow container -->
-                      <div class="slideshow-container">
 
-                        <!-- Full-width images with number and caption text -->
-                        <div class="mySlides">
-                          <div class="numbertext">1 / 3</div>
-                          <img src="imga.jpg" style="width:100%">
-                        </div>
-
-                        <div class="mySlides">
-                          <div class="numbertext">2 / 3</div>
-                          <img src="imgb.jpg" style="width:100%">
-                        </div>
-
-                        <div class="mySlides">
-                          <div class="numbertext">3 / 3</div>
-                          <img src="imgc.webp" style="width:100%">
-                        </div>
-
-                        <!-- Next and previous buttons -->
-                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-                      </div>
-                      <br>
-
-                      <!-- The dots/circles -->
-                      <div style="text-align:center">
-                        <span class="dot" onclick="currentSlide(1)"></span>
-                        <span class="dot" onclick="currentSlide(2)"></span>
-                        <span class="dot" onclick="currentSlide(3)"></span>
-                      </div>
-
-                      <script type="text/javascript">
-                        var slideIndex = 1;
-                        showSlides(slideIndex);
-
-                        // Next/previous controls
-                        function plusSlides(n) {
-                          showSlides(slideIndex += n);
-                        }
-
-                        // Thumbnail image controls
-                        function currentSlide(n) {
-                          showSlides(slideIndex = n);
-                        }
-
-                        function showSlides(n) {
-                          var i;
-                          var slides = document.getElementsByClassName("mySlides");
-                          var dots = document.getElementsByClassName("dot");
-                          if (n > slides.length) {slideIndex = 1}
-                          if (n < 1) {slideIndex = slides.length}
-                          for (i = 0; i < slides.length; i++) {
-                              slides[i].style.display = "none";
-                          }
-                          for (i = 0; i < dots.length; i++) {
-                              dots[i].className = dots[i].className.replace(" active", "");
-                          }
-                          slides[slideIndex-1].style.display = "block";
-                          dots[slideIndex-1].className += " active";
-                        }
-                      </script>
-                    <!-- End Slide Show -->
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>媒體庫 <small>此處可放入備註、作者等相關資料</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="col-md-10 col-lg-10 col-sm-7">
-                    <!-- Start Audio -->
-                    <p> 課文朗讀 ：</p>
-                    <audio controls>
-                      <source src="mp3-1.mp3" type="audio/mp3">
-                    </audio>
-                    <audio controls="">
-                      <source src="mp3-2.mp3" type="audio/mp3">
-                    </audio>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
 
