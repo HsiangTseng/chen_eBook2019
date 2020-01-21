@@ -8,7 +8,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1">
         	<link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-          <title>eBook | </title>
+            <title>eBook | </title>
 
             <!-- Bootstrap -->
             <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -99,84 +99,75 @@
 
         <!-- page content################################# -->
         <div class="right_col" role="main">
-            <!-- Content -->
-            <div class="row">
-              <div class="col-md-10 col-xs-12">
+
+                <!-- Content -->
                 <div class="x_panel">
                   <div class="x_title">
-                    <h1><strong>新增電子書</strong></h1>
+                    <h1><strong>電子書列表</strong></h1>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
-                    <br />
 
-                    <form class="form-horizontal form-label-left input_mask" method="post" action="BookDetail.php" enctype="multipart/form-data" onKeyDown="if (event.keyCode == 13) {return false;}">
+                  <!--BookList Table-->
+                  <table id="b_list" class="table table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th>編號</th>
+                        <th>主標題</th>
+                        <th>副標題</th>
+                        <th>編輯老師</th>
+                        <th>出題時間</th>
+                        <th>閱讀</th>
+                      </tr>
+                    </thead>
+                    <?php
+                      include("connects.php");
+                      $sql = "SELECT MAX(book_id) AS max FROM Book";
+                      $result = mysqli_fetch_object($db->query($sql));
+                      $book_numbers = $result->max;
+                      //echo $book_numbers;
+                      $book_id = array();
+                      $main_title = array();
+                      $sub_title = array();
+                      $edit_teacher = array();
+                      $create_date = array();
+                      for ($i = 1 ; $i <= $book_numbers ; $i++)
+                      {
+                        $sql2 = "SELECT * FROM `Book` WHERE `book_id` = $i ";
+                        $result2 = mysqli_fetch_object($db->query($sql2));
+                        $book_id[$i] = $result2->book_id;
+                        $main_title[$i] = $result2->main_title;
+                        $sub_title[$i] = $result2->sub_title;
+                        $edit_teacher[$i] = $result2->edit_teacher;
+                        $create_date[$i] = $result2->create_date;
+                        $book_id_to_json =json_encode((array)$book_id);
+                        $main_title_to_json=json_encode((array)$main_title);
+                        $sub_title_to_json=json_encode((array)$sub_title);
+                        $edit_teacher_to_json=json_encode((array)$edit_teacher);
+                        $create_date_to_json=json_encode((array)$create_date);
+                      }
+                    ?>
+                    <tbody>
+                      <tr>
+                        <?php
+                        echo '<td>'.$book_id[1].'</td>';
+                        echo '<td>'.$main_title[1].'</td>';
+                        echo '<td>'.$sub_title[1].'</td>';
+                        echo '<td>'.$edit_teacher[1].'</td>';
+                        echo '<td>'.$create_date[1].'</td>';
+                        echo '<td><button type="submit" class="btn btn-success" onclick="btnclk(1)">閱讀</button></td>';
+                        ?>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!--BookList Table-->
 
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">主標題 :</label>
-                        <div class="col-md-6 col-sm-6 col-xs-10">
-                          <input type="text" class="form-control" name="main_title" placeholder="請輸入主標題（ex:主題：O O O）" required="required">
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">副標題 :</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                          <input type="text" class="form-control" name="sub_title" placeholder="請輸入副標題（ex:第一單元：O O O" required="required">
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">編書老師 :</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                          <input type="text" class="form-control" name="edit_teacher" required="required">
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">頁數 :</label>
-                        <div class="col-md-4 col-sm-4">
-                          <select id="page" name="page" class="form-control" required>
-                            <option value="1">1頁</option>
-                            <option value="2">2頁</option>
-                            <option value="3">3頁</option>
-                            <option value="4">4頁</option>
-                            <option value="5">5頁</option>
-                            <option value="6">6頁</option>
-                            <option value="7">7頁</option>
-                            <option value="8">8頁</option>
-                            <option value="9">9頁</option>
-                            <option value="10">10頁</option>
-                          </select>
-                        </div>
-                      </div>
-
-
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <button type="submit" id="btn_submit" class="btn btn-success">開始編輯</button>
-                        </div>
-                      </div>
-
-                    </form>
-                  </div>
                 </div>
                 <!-- Content -->
 
 
 
-
-
-
-
-
+        </div>
         <!-- page content################################# -->
-
-        <!-- footer content -->
-        <!--footer>
-        <!--/footer>
-        <!-- /footer content -->
 
 
       </div>
@@ -231,5 +222,55 @@
             <!-- Custom Theme Scripts -->
             <script src="../build/js/custom.min.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
+
+            <script type="text/javascript" class="init">
+                $('#b_list').dataTable( {
+                  "columns": [
+                    { "width": "5%" },
+                    { "width": "25%" },
+                    { "width": "25%" },
+                    { "width": "15%" },
+                    { "width": "20%" },
+                    { "width": "5%" },
+                  ],
+                  "columnDefs": [
+                    { targets: '_all',  className: 'dt-body-center'},
+                    { targets: '_all',  className: 'dt-head-center'},
+                  ]
+                } );
+
+                function btnclk(b_index)
+                {
+                  var index = b_index;
+                  window.location.href = 'ReadBook.php?book_id='+index+'&page=1';
+                }
+
+                $(document).ready
+                (
+                    function()
+                        {
+                          var bookidFromPHP=<? echo $book_id_to_json ?>;
+                          var maintitleFromPHP=<? echo $main_title_to_json ?>;
+                          var subtitleFromPHP=<? echo $sub_title_to_json ?>;
+                          var editteacherFromPHP=<? echo $edit_teacher_to_json ?>;
+                          var createtimeFromPHP=<? echo $create_date_to_json ?>;
+
+                          var t = $('#b_list').DataTable();
+                          for (var i=2 ; i<= <?php echo "$book_numbers";?> ; i++)
+                          {
+                            t.row.add(
+                            [
+                            bookidFromPHP[i],
+                            maintitleFromPHP[i],
+                            subtitleFromPHP[i],
+                            editteacherFromPHP[i],
+                            createtimeFromPHP[i],
+                            "<button type=\"submit\" class=\"btn btn-success\" onclick=\"btnclk("+i+")\">閱讀</button>",
+                            ]).draw(false);
+                          }
+                        }
+
+                );
+            </script>
   </body>
 </html>

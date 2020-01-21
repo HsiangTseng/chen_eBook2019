@@ -15,7 +15,7 @@ $page = $_POST['page'];
             <meta name="viewport" content="width=device-width, initial-scale=1">
         	<link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-          <title>eBook | </title>
+            <title>eBook | </title>
 
             <!-- Bootstrap -->
             <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -76,8 +76,8 @@ $page = $_POST['page'];
                 <ul class="nav side-menu">
 
                   <?php
-                  include("side_bar_menu.php");
-                  echo side_bar();
+                  /*include("side_bar_menu.php");
+                  echo side_bar();*/
                   ?>
                 </ul>
               </div>
@@ -111,8 +111,8 @@ $page = $_POST['page'];
         <!-- page content################################# -->
         <div class="right_col" role="main">
 
-            <form class="form-horizontal form-label-left input_mask" method="post" action="updateBookData.php" enctype="multipart/form-data">
             <!-- Cotent -->
+            <form class="form-horizontal form-label-left input_mask" method="post" action="updateBookData.php" enctype="multipart/form-data">
             <div class="row">
               <div class="col-md-6 col-xs-12">
                 <div class="x_panel">
@@ -121,6 +121,8 @@ $page = $_POST['page'];
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+
+
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">主標題 :</label>
                         <div class="col-md-8 col-sm-8 col-xs-10">
@@ -149,8 +151,7 @@ $page = $_POST['page'];
                         </div>
                       </div>
                       <div class="ln_solid"></div>
-                      <p style="text-align:center;"><strong>註1：編寫課文時，四下空白鍵＝空兩格中文字</strong></p>
-                      <p style="text-align:center;"><strong>註2：單頁上限為200字，包含空格及標點符號，無法輸入表示已達200字</strong></p>
+
                       <!-- Content Block -->
                       <?php
                       for ($i=1 ; $i <= $page ; $i++)
@@ -158,7 +159,7 @@ $page = $_POST['page'];
                         echo '<div class="form-group">';
                         echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">第'.$i.'頁</label>';
                         echo '<div class="col-md-8 col-sm-8 col-xs-12">';
-                          echo '<textarea id="test" name="content[]" class="form-control" rows="5" wrap="soft" maxlength="200" required></textarea>';
+                          echo '<textarea name="content[]" class="form-control" rows="5" wrap="off" maxlength="200"></textarea>';
                         echo '</div>';
                         echo '</div>';
                         //echo '<div class="ln_solid"></div>';
@@ -171,20 +172,11 @@ $page = $_POST['page'];
 
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <button type="submit" id="btn_submit" class="btn btn-success" onclick="return go()">完成編輯</button>
+                          <button type="submit" id="btn_submit" class="btn btn-success">完成編輯</button>
                         </div>
                       </div>
-                      <script>
-                      function replaceHtml(string_to_replace) {
-                        return $("<div>").append(string_to_replace.replace(/&nbsp;/g, ' ').replace(/<br.*?>/g, '&#13;&#10;')).text();
-                      }
 
-                      function go(){
-                        var str = $("#test").val();
-                        $("#test").val(replaceHtml(str));
-                      }
-
-                      </script>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -196,7 +188,6 @@ $page = $_POST['page'];
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <form class="form-horizontal form-label-left input_mask" method="post" action="test2.php" enctype="multipart/form-data" onKeyDown="if (event.keyCode == 13) {return false;}">
                       <div class="form-horizontal form-label-left">
                         <div class="form-group">
                           <label class="control-label col-md-3" for="first-name">增減教材數量 : </label>
@@ -222,10 +213,10 @@ $page = $_POST['page'];
                                               '<input type="text" class="form-control" name="material_name[]">'+
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳教材'+material_create_input_number+'圖檔 :</label>'+
-                                           '<input type="file" name="A'+material_create_input_number+'_file"><br />'+
+                                           '<input type="file" name="A'+material_create_input_number+'_file" required /><br />'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">教材'+material_create_input_number+'說明 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<textarea name="material_content[]" class="form-control" rows="5" wrap="soft" maxlength="150"></textarea>'+
+                                              '<textarea name="material_content[]" class="form-control" rows="5" wrap="off" maxlength="200"></textarea>'+
                                            '</div>';
 
                                   div_form.innerHTML = lb;
@@ -245,15 +236,15 @@ $page = $_POST['page'];
 
                         </script>
 
+
                       </div>
                   </div>
                 </div>
               </div>
 
             </div>
-                <!-- Cotent -->
           </form>
-
+                <!-- Cotent -->
 
 
 
