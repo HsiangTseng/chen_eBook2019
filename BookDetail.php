@@ -196,7 +196,7 @@ $page = $_POST['page'];
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <form class="form-horizontal form-label-left input_mask" method="post" action="test2.php" enctype="multipart/form-data" onKeyDown="if (event.keyCode == 13) {return false;}">
+                    <form class="form-horizontal form-label-left input_mask" method="post" action="" enctype="multipart/form-data" onKeyDown="if (event.keyCode == 13) {return false;}">
                       <div class="form-horizontal form-label-left">
                         <div class="form-group">
                           <label class="control-label col-md-3" for="first-name">增減教材數量 : </label>
@@ -243,6 +243,109 @@ $page = $_POST['page'];
                                       }
                                   }
 
+                        </script>
+
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h1><strong>編輯課堂練習</strong></h1>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <form class="form-horizontal form-label-left input_mask" method="post" action="" enctype="multipart/form-data" onKeyDown="if (event.keyCode == 13) {return false;}">
+                      <div class="form-horizontal form-label-left">
+                        <div class="form-group">
+                          <label class="control-label col-md-3" for="first-name">增減習題數量 : </label>
+                          <button type="button" class="btn btn-success" onclick="addInputExe()">+</button>
+                          <button type="button" class="btn btn-danger" onclick="subInputExe()">-</button>
+                        </div>
+
+                        <div id="exercise"></div>
+
+                        <input type="hidden" name="exercise_number"  id="exercise_number">
+                        <script>
+                        var exercise_create_input_number = 0;
+                        function addInputExe() {
+                                  exercise_create_input_number++;
+                                  var ediv_form = document.createElement("DIV");
+                                  ediv_form.setAttribute("class","form-group");
+                                  name = 'div_epic'+exercise_create_input_number;
+                                  ediv_form.setAttribute("id",name);
+
+                                  var elb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">習題'+exercise_create_input_number+'題目 :</label>'+
+                                           '<div class="col-md-8 col-sm-8 col-xs-10">'+
+                                              '<input type="text" class="form-control" name="exercise_content[]">'+
+                                           '</div>'+
+                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳習題'+exercise_create_input_number+'圖檔 :</label>'+
+                                           '<input type="file" name="E'+exercise_create_input_number+'Q1_file"><br />'+
+                                           '<div class="form-group">'+
+
+                                             '<label class="control-label col-md-3" for="last-name">選項(A) :<span class="required"></span></label>'+
+                                             '<div class="col-md-5">'+
+                                                 '<input type="text"  name="A1[]" required="required" class="form-control col-md-7 col-xs-12">'+
+                                             '</div>'+
+                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
+                                             '<div class="col-md-3">'+
+                                                 '<input type="file" name="E'+exercise_create_input_number+'A1_file"/>'+
+                                             '</div>'+
+                                           '</div>'+
+                                           '<div class="form-group">'+
+                                             '<label class="control-label col-md-3" for="last-name">選項(B) :<span class="required"></span></label>'+
+                                             '<div class="col-md-5">'+
+                                                 '<input type="text"  name="A2[]" required="required" class="form-control col-md-7 col-xs-12">'+
+                                             '</div>'+
+                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
+                                             '<div class="col-md-3">'+
+                                                 '<input type="file" name="E'+exercise_create_input_number+'A2_file"/>'+
+                                             '</div>'+
+                                           '</div>'+
+
+                                           '<div class="form-group">'+
+                                             '<label class="control-label col-md-3" for="last-name">選項(C) :<span class="required"></span></label>'+
+                                             '<div class="col-md-5">'+
+                                                 '<input type="text"  name="A3[]" required="required" class="form-control col-md-7 col-xs-12">'+
+                                             '</div>'+
+                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
+                                             '<div class="col-md-3">'+
+                                                 '<input type="file" name="E'+exercise_create_input_number+'A3_file"/>'+
+                                             '</div>'+
+                                           '</div>'+
+                                           '<div class="form-group">'+
+                                             '<label class="control-label col-md-3" for="last-name">選項(D) :<span class="required"></span></label>'+
+                                             '<div class="col-md-5">'+
+                                                 '<input type="text"  name="A4[]" required="required" class="form-control col-md-7 col-xs-12">'+
+                                             '</div>'+
+                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
+                                             '<div class="col-md-3">'+
+                                                 '<input type="file" name="E'+exercise_create_input_number+'A4_file"/>'+
+                                             '</div>'+
+                                           '</div>'+
+                                           '<label class="control-label col-md-3" for="first-name">正解 :<span class="required"></span></label>'+
+                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A1" required><label>A選項</label>'+
+                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A2"><label>B選項</label>'+
+                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A3"><label>C選項</label>'+
+                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A4"><label>D選項</label>'+
+                                           '<hr />';
+
+
+                                  ediv_form.innerHTML = elb;
+                                  document.getElementById("exercise").appendChild(ediv_form);
+                                  document.getElementById("exercise_number").value=exercise_create_input_number;
+                                  }
+                        function subInputExe() {
+                                    if(exercise_create_input_number>0)
+                                      {
+                                        _ename = 'div_epic'+exercise_create_input_number;
+                                      document.getElementById(_ename).remove();
+                                      exercise_create_input_number--;
+                                      document.getElementById("exercise_number").value=exercise_create_input_number;
+                                      }
+                                  }
                         </script>
 
                       </div>

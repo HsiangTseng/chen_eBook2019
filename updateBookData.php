@@ -38,6 +38,7 @@ $content = $_POST['content'];
     $page_number ++;
     $sql3 = "INSERT INTO Page (book_id, page_no, content) VALUES ('$max_number', '$page_number', '$content[$key]')";
     $db->query($sql3);
+    echo $content[$key];
   }
 
   //INSERT TeachMaterial DataTable
@@ -67,7 +68,111 @@ $content = $_POST['content'];
         $db->query($sql3);
       }
   }
-  echo "<script>alert('編書成功'); location.href = 'BookList.php';</script>";
+
+  //INSERT Exercise DataTable
+  if(isset($_POST['exercise_content']))
+  {
+      //-----EXERCISE FROM POST-----
+      $exercise_content = $_POST['exercise_content'];
+      $A1 = $_POST['A1'];
+      $A2 = $_POST['A2'];
+      $A3 = $_POST['A3'];
+      $A4 = $_POST['A4'];
+
+
+      // INSERT BOOK DataTable
+
+      //for each question
+      foreach ($exercise_content as $key => $value) {
+
+        //-----file block-----
+        $pic_index = $key;
+        $pic_index = $pic_index+1;
+        $q1_name="";
+        $a1_name="";
+        $a2_name="";
+        $a3_name="";
+        $a4_name="";
+        $Q_pic_name = 'E'.$pic_index.'Q1_file';
+        if ($_FILES[$Q_pic_name]['error'] === UPLOAD_ERR_OK){
+    	  $file = $_FILES[$Q_pic_name]['tmp_name'];
+    	  $q1_ext = end(explode('.', $_FILES[$Q_pic_name]['name']));
+        $q1_name = 'B'.(string)$max_number.'E'.(string)$pic_index.'Q1.'.$q1_ext;
+    	  $dest = 'upload/B'.(string)$max_number.'E'.(string)$pic_index.'Q1.'.$q1_ext;
+    	   move_uploaded_file($file, $dest);
+    	  }
+    	else {
+    	}
+        $A1_pic_name = 'E'.$pic_index.'A1_file';
+        if ($_FILES[$A1_pic_name]['error'] === UPLOAD_ERR_OK){
+        $file = $_FILES[$A1_pic_name]['tmp_name'];
+        $a1_ext = end(explode('.', $_FILES[$A1_pic_name]['name']));
+        $a1_name = 'B'.(string)$max_number.'E'.(string)$pic_index.'A1.'.$a1_ext;
+        $dest = 'upload/B'.(string)$max_number.'E'.(string)$pic_index.'A1.'.$a1_ext;
+         move_uploaded_file($file, $dest);
+        }
+      else {
+      }
+        $A2_pic_name = 'E'.$pic_index.'A2_file';
+        if ($_FILES[$A2_pic_name]['error'] === UPLOAD_ERR_OK){
+        $file = $_FILES[$A2_pic_name]['tmp_name'];
+        $a2_ext = end(explode('.', $_FILES[$A2_pic_name]['name']));
+        $a2_name = 'B'.(string)$max_number.'E'.(string)$pic_index.'A2.'.$a2_ext;
+        $dest = 'upload/B'.(string)$max_number.'E'.(string)$pic_index.'A2.'.$a2_ext;
+         move_uploaded_file($file, $dest);
+        }
+      else {
+      }
+        $A3_pic_name = 'E'.$pic_index.'A3_file';
+        if ($_FILES[$A3_pic_name]['error'] === UPLOAD_ERR_OK){
+        $file = $_FILES[$A3_pic_name]['tmp_name'];
+        $a3_ext = end(explode('.', $_FILES[$A3_pic_name]['name']));
+        $a3_name = 'B'.(string)$max_number.'E'.(string)$pic_index.'A3.'.$a3_ext;
+        $dest = 'upload/B'.(string)$max_number.'E'.(string)$pic_index.'A3.'.$a3_ext;
+         move_uploaded_file($file, $dest);
+        }
+      else {
+      }
+        $A4_pic_name = 'E'.$pic_index.'A4_file';
+        if ($_FILES[$A4_pic_name]['error'] === UPLOAD_ERR_OK){
+        $file = $_FILES[$A4_pic_name]['tmp_name'];
+        $a4_ext = end(explode('.', $_FILES[$A4_pic_name]['name']));
+        $a4_name = 'B'.(string)$max_number.'E'.(string)$pic_index.'A4.'.$a4_ext;
+        $dest = 'upload/B'.(string)$max_number.'E'.(string)$pic_index.'A4.'.$a4_ext;
+         move_uploaded_file($file, $dest);
+        }
+      else {
+      }
+
+        //-----file block-----
+
+
+        $ca_index = $key;
+        $ca_index = $ca_index+1;
+        $CA_NAME = 'answer'.$ca_index;
+        $CA=$_POST[$CA_NAME];
+
+        $sql_m = "SELECT MAX(question_no) AS max FROM Question";
+        $result_m = mysqli_fetch_object($db->query($sql_m));
+
+        $max_question_no = $result_m->max;
+        $max_question_no = $max_question_no+1;
+
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,type,single_or_multi,CA,Content,picture_ext) VALUES ('$max_number','$max_question_no','Q','WORD','SINGLE','$CA[0]','$exercise_content[$key]','$q1_name')";
+        $db->query($sql4);
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A1','$A1[$key]','$a1_name')";
+        $db->query($sql4);
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A2','$A2[$key]','$a2_name')";
+        $db->query($sql4);
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A3','$A3[$key]','$a3_name')";
+        $db->query($sql4);
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A4','$A4[$key]','$a4_name')";
+        $db->query($sql4);
+      }
+  }
+
+
+  //echo "<script>alert('編書成功'); location.href = 'BookList.php';</script>";
 
 
 ?>

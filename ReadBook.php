@@ -140,7 +140,7 @@
 
             <div class="row">
               <!-- LEFT HALF BLOCK-->
-              <div class="col-md-8">
+              <div class="col-md-8" id="div_content">
                 <div class="x_panel" style="height:91vh;">
                   <div class="x_title">
                     <h2><b>課文內容 &nbsp&nbsp</b></h2>
@@ -166,6 +166,24 @@
                             }
                           }
                            ?>
+                           <button onclick="hide()">hide</button>
+                           <button onclick="show()">show</button>
+                           <script>
+                             function hide()
+                             {
+                               document.getElementById("div_media").style.display = "none";
+                               document.getElementById("div_practice").style.display = "none";
+                               document.getElementById("div_content").classList.add('col-md-12');
+                               document.getElementById("div_content").classList.remove('col-md-8');
+                             }
+                             function show()
+                             {
+                               document.getElementById("div_media").style.display = "block";
+                               document.getElementById("div_practice").style.display = "block";
+                               document.getElementById("div_content").classList.add('col-md-8');
+                               document.getElementById("div_content").classList.remove('col-md-12');
+                             }
+                           </script>
                         </div>
                       <!-- End pagination-->
                     <div class="clearfix"></div>
@@ -269,7 +287,7 @@
             </div>
 
             <!-- RIGHT HALF BLOCK-->
-            <div class="col-md-4">
+            <div class="col-md-4" id="div_media">
               <div class="x_panel" style="height:65vh;">
                 <div class="x_title">
                   <h2><b>補充教材</b></h2>
@@ -289,7 +307,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" id="div_practice">
               <div class="x_panel" style="height:25vh;">
                 <div class="x_title">
                   <h2><b>課堂練習</b></h2>
