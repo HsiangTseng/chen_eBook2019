@@ -34,11 +34,26 @@ $content = $_POST['content'];
 
   //INSERT PAGE DatTable
   foreach ($content as $key => $value) {
+    //IMG FILE UPLOAD_ERR_OK
+    $page_index = $key;
+    $page_index++;
+    $page_img_name = 'P'.$page_index.'_file';
+    $page_img_output_name = "";
+
+    if ($_FILES[$page_img_name]['error'] === UPLOAD_ERR_OK){
+    $file = $_FILES[$page_img_name]['tmp_name'];
+    $ext[$page_index] = end(explode('.', $_FILES[$page_img_name]['name']));
+    $dest = 'upload/B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
+    $page_img_output_name = 'B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
+    move_uploaded_file($file, $dest);
+    }
+    else {
+    }
     $page_number = $key;
     $page_number ++;
-    $sql3 = "INSERT INTO Page (book_id, page_no, content) VALUES ('$max_number', '$page_number', '$content[$key]')";
+    $sql3 = "INSERT INTO Page (book_id, page_no, content,picture_ext) VALUES ('$max_number', '$page_number', '$content[$key]','$page_img_output_name')";
     $db->query($sql3);
-    echo $content[$key];
+    //echo $content[$key];
   }
 
   //INSERT TeachMaterial DataTable
@@ -74,6 +89,7 @@ $content = $_POST['content'];
   {
       //-----EXERCISE FROM POST-----
       $exercise_content = $_POST['exercise_content'];
+      $exercise_title = $_POST['exercise_title'];
       $A1 = $_POST['A1'];
       $A2 = $_POST['A2'];
       $A3 = $_POST['A3'];
@@ -158,21 +174,47 @@ $content = $_POST['content'];
         $max_question_no = $result_m->max;
         $max_question_no = $max_question_no+1;
 
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,type,single_or_multi,CA,Content,picture_ext) VALUES ('$max_number','$max_question_no','Q','WORD','SINGLE','$CA[0]','$exercise_content[$key]','$q1_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,type,single_or_multi,CA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','Q','WORD','SINGLE','$CA[0]','$exercise_title[$key]','$exercise_content[$key]','$q1_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A1','$A1[$key]','$a1_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A1','$exercise_title[$key]','$A1[$key]','$a1_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A2','$A2[$key]','$a2_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A2','$exercise_title[$key]','$A2[$key]','$a2_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A3','$A3[$key]','$a3_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A3','$exercise_title[$key]','$A3[$key]','$a3_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,Content,picture_ext) VALUES ('$max_number','$max_question_no','A4','$A4[$key]','$a4_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A4','$exercise_title[$key]','$A4[$key]','$a4_name')";
         $db->query($sql4);
       }
   }
 
+  //INSERT Audio DataTable
+  if(isset($_POST['audio_title']))
+  {
+    $audio_title = $_POST['audio_title'];
+    //for each question
+    foreach ($audio_title as $key => $value) {
+      $audio_index = $key;
+      $audio_index ++;
+      $audio_output_name="";
+      $audio_name = 'Audio'.$audio_index.'_file';
+      if ($_FILES[$audio_name]['error'] === UPLOAD_ERR_OK){
+    	  $file = $_FILES[$audio_name]['tmp_name'];
+    	  $audio_ext = end(explode('.', $_FILES[$audio_name]['name']));
+    	  $audio_dest = 'upload/B'.(string)$max_number.'Audio'.$audio_index.'.'.$audio_ext;
+        $audio_output_name = 'B'.(string)$max_number.'Audio'.$audio_index.'.'.$audio_ext;
+    	   # 將檔案移至指定位置
+    	   move_uploaded_file($file, $audio_dest);
+         //echo $max_number.'.'.$audio_index.'.'.$audio_title[$key].'.'.$audio_output_name;
 
-  //echo "<script>alert('編書成功'); location.href = 'BookList.php';</script>";
+    	  }
+    	else {
+    	}
+      $sql = "INSERT INTO Audio (book_id, audio_no, title, audio_ext) VALUES ('$max_number','$audio_index','$audio_title[$key]','$audio_output_name')";
+      $db->query($sql);
+    }
+  }
+
+  echo "<script>alert('編書成功'); location.href = 'BookList.php';</script>";
 
 
 ?>

@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <?php 
 	session_start();
-	//new
 	$start_time = microtime(true);
+	$_SESSION["show_label"] = null;
 ?>
 
 <?php
 	include("connects.php");
-	$sql = "SELECT * FROM `Now_state`";
-	$temp = "SELECT * FROM `temp_for_state`";
-	$now = 0;
-	$last = 0;
+	$sql = "SELECT * FROM `Now_stats`";
+	$now_book_id = 0;
+	$now_question_no = 0;
+	$old_book_id = 0;
+	$old_question_no = 0;
 	if($stmt = $db->query($sql)){
-		while($result = mysqli_fetch_object($stmt)){
-			$now = $result->No;
-			$stmt = $db->query($temp);
-			$result = mysqli_fetch_object($stmt);
-			$last = $result->No_temp;	
-		}
+		$result = mysqli_fetch_object($stmt);
+			$now_book_id = $result->book_id;
+			$now_question_no = $result->question_no;
+			
+			$old_book_id = $result->old_book_id;
+			$old_question_no = $result->old_question_no;
+		
 	}
-	if($now==0)
-	{
-		header ('location: wait.php');
-        exit;
-	}	
 ?>
-
-
 
 <html lang="en" style="height:100%">
 	<head>
@@ -62,15 +57,15 @@
 
 	<body class="nav-md"  style="height:100%">	
 		<style>		
-      html, body {
-        height: 100%;
-	background-color:rgba(255,255,255,0.4);
-      }
-      .test {
-        text-align:center;
-	vertical-align:middle;
-      }
-	.rwdtxt {
+			html, body {
+				height: 100%;
+				background-color:rgba(255,255,255,0.4);
+			}
+			.test {
+				text-align:center;
+				vertical-align:middle;
+			}
+			.rwdtxt {
 				font-size: 10px;
 			}
 			@media (min-width: 400px) and (max-width: 900px) {
@@ -83,148 +78,169 @@
 					font-size: 30px;
 				}
 			}
-	.rwdonlytxt {
-        	font-size: 60px;
-        }
-  	@media (min-width: 400px) and (max-width: 900px) {
-	       .rwdonlytxt {
-  		      font-size: 80px;
-              	}
-        }
-        @media (min-width: 900px) and (max-width: 1000px) {
-               .rwdonlytxt {
-	               font-size: 100px;
-               }
-        }
-	@media (min-width: 1000px) {
-               .rwdonlytxt {
-                       font-size: 120px;
-               }
-        }
-	  
-	  .div25{
-		height:25%;
-	}
-	  
-	  .div50{
-		height:50%;
-	  }
-	.test input[type=radio] + label{
-       	 border: 2px solid gray;
-       	 border-radius:10px;
-      }
-	
-	.test input[type=checkbox] + label{
-        border: 2px solid gray;
-        border-radius:10px;
-      }
-      .test input[type=checkbox]:checked + label{									
-        border: 3px solid red;
-        border-radius:10px;
-      }		
-      input[type=checkbox]{
-        display:none
-      }
-      .test input[type=radio]:checked + label{									
-        border: 3px solid red;
-        border-radius:10px;
-      }		
-      input[type=radio]{
-        display:none
-      }
-		
-      .logic_graph{
-	 background-color:rgba(200,200,200,0.4);	
-      }
-      audio{
-	display:block;
-        margin:0 auto;
-	clear: both;
-        width:80%;
-      }
-      .square-button {
-        max-width: 100%;
-        min-height: 80%;
-	max-height:100%;
-	display:block;
-        margin:auto;
-        position: relative;
-        background-color:rgba(255,255,255,0.4);
-        border-radius:10px;
-	vertical-align: middle;
-      }
-       .show-img {
-	border: 1px solid black;
-        border-radius:10px;
-        max-width:90%;
-        max-height: 90%;
-        position: absolute;
-        display:block;
-        margin:auto;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-      }
-	
-	.small-img {
-	max-width:85%;
-        min-height:80%;
-	max-height:85%;
-        position: absolute;
-        display:block; 
-        margin:auto;
-        top: 45%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-      }
-	.show-text{
-        position: absolute;
-        display:block; 
-        margin:auto;
-        top: 95%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-      }
-     </style>
+			.rwdonlytxt {
+				font-size: 60px;
+			}
+			@media (min-width: 400px) and (max-width: 900px) {
+				.rwdonlytxt {
+					font-size: 80px;
+				}
+			}
+			@media (min-width: 900px) and (max-width: 1000px) {
+				.rwdonlytxt {
+					font-size: 100px;
+				}
+			}
+			@media (min-width: 1000px) {
+				.rwdonlytxt {
+					font-size: 120px;
+				}
+			}
+			.div25{
+				height:25%;
+			}
+			.div50{
+				height:50%;
+			}
+			.test input[type=radio] + label{
+				border: 2px solid gray;
+				border-radius:10px;
+			}
+			.test input[type=checkbox] + label{
+				border: 2px solid gray;
+				border-radius:10px;
+			}
+			.test input[type=checkbox]:checked + label{									
+				border: 3px solid red;
+				border-radius:10px;
+			}		
+			input[type=checkbox]{
+				display:none
+			}
+			.test input[type=radio]:checked + label{									
+				border: 3px solid red;
+				border-radius:10px;
+			}		
+			input[type=radio]{
+				display:none
+			}
+			.logic_graph{
+				background-color:rgba(200,200,200,0.4);	
+			}
+			audio{
+				display:block;
+				margin:0 auto;
+				clear: both;
+				width:80%;
+			}
+			.square-button {
+				max-width: 100%;
+				min-height: 80%;
+				max-height:100%;
+				display:block;
+				margin:auto;
+				position: relative;
+				background-color:rgba(255,255,255,0.4);
+				border-radius:10px;
+				vertical-align: middle;
+			}
+			.show-img {
+				border: 1px solid black;
+				border-radius:10px;
+				max-width:90%;
+				max-height: 90%;
+				position: absolute;
+				display:block;
+				margin:auto;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
+
+			.small-img {
+				max-width:85%;
+				min-height:80%;
+				max-height:85%;
+				position: absolute;
+				display:block; 
+				margin:auto;
+				top: 45%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
+			.show-text{
+				position: absolute;
+				display:block; 
+				margin:auto;
+				top: 95%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
+			
+
+		</style>
 		<div class="container body"  style="height:100%">
 			<div class="main_container"  style="height:100%">
 			<!-- page content################################# -->
 				<div class="x_panel test" role="main"  style="height:100%">
 					<form method="post" action="submit_answer.php" style="height:100%">
+						<div class="col-md-12 col-sm-12 col-xs-12 rwdtxt" style="height:10%; position:fixed; top:0; z-index:1;">
+                                                        <label id="label_show">
+								<?php 
+									if($_SESSION["show_label"] != null){
+										echo $_SESSION["show_label"];
+									}
+
+								?>
+							</label>
+                                                </div>
 						<?php
 							echo "<input type='hidden' id='hidden_time' name='hidden_time' value='".microtime(true)."'/>";
 						?>
-						<input type="hidden" id="hidden_value" name="hidden" value=""/>
-						<!-- Question -->																			
+						<input type="hidden" id="hidden_value" name="hidden" value=""/>																
 						<script>
-							var get_last = <?php echo "$last";?>;
-							var get_now =  <?php echo "$now";?>;
+							var last_book_id = <?php echo "$old_book_id";?>;
+							var last_question_no = <?php echo "$old_question_no";?>;							
+
+							var now_book_id =  <?php echo "$now_book_id";?>;							
+							var now_question_no =  <?php echo "$now_question_no";?>;
 							
 							function set_question(){
-								if(get_now == 0){
-									document.location.href="wait.php";
-								}
-								if(get_last != get_now){
-									//跳至下一題
-									$.ajax(
-									{
-										type:"POST",
-										url:"mobile_reset.php"															
+								if(last_book_id != now_book_id){
+									//跳至下一題									
+									if(last_question_no != now_question_no){
+										$.ajax(
+										{
+											type:"POST",
+											url:"mobile_reset.php"															
+										}
+										).done(function(msg){});
+										window.location.reload();			
 									}
-									).done(function(msg){});
-									window.location.reload();															
+																				
+								}
+								else{
+									if(last_question_no != now_question_no){
+										 $.ajax(
+	                                                                        {
+	                                                                                type:"POST",
+	                                                                                url:"mobile_reset.php"	
+                	                                                        }
+        	                                                                ).done(function(msg){});
+                        	                                                window.location.reload();
+									}
 								}
 								$.ajax(
 								{
 									type:"POST",
 									url:"mobile_reset.php",
 									success:function(data){
-										get_last = data;
+										last_question_no = data;
 									}
 								});
 							}
 							setInterval(set_question,300);
-						</script>		 
+						</script>
 						<?php
 							include("connects.php");
 							include("getdata.php");
@@ -233,6 +249,12 @@
 							<input type="submit" value="確定" name="submit" style="width:25%; height:100%;">							
 						</div>
 					</form>
+					<script>
+						
+					</script>
+
+					
+
 					<!-- question form-->
 					
 					<!-- 邏輯順序題的回答 -->

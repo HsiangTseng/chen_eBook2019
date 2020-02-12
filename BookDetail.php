@@ -156,13 +156,15 @@ $page = $_POST['page'];
                       for ($i=1 ; $i <= $page ; $i++)
                       {
                         echo '<div class="form-group">';
-                        echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">第'.$i.'頁</label>';
-                        echo '<div class="col-md-8 col-sm-8 col-xs-12">';
-                          echo '<textarea id="test" name="content[]" class="form-control" rows="5" wrap="soft" maxlength="200" required></textarea>';
+                          echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">第'.$i.'頁</label>';
+                          echo '<div class="col-md-8 col-sm-8 col-xs-12">';
+                            echo '<textarea id="test" name="content[]" class="form-control" rows="5" wrap="soft" maxlength="200" required></textarea>';
+                          echo '</div>';
                         echo '</div>';
-                        echo '</div>';
+                        echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳背景圖 :</label>';
+                        echo '<input type="file" name="P'.$i.'_file"><br />';
+                        echo '<hr />';
                         //echo '<div class="ln_solid"></div>';
-
                       }
                       ?>
 
@@ -192,7 +194,7 @@ $page = $_POST['page'];
               <div class="col-md-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h1><strong>編輯教材</strong></h1>
+                    <h1><strong>新增教材</strong></h1>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
@@ -253,7 +255,7 @@ $page = $_POST['page'];
               <div class="col-md-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h1><strong>編輯課堂練習</strong></h1>
+                    <h1><strong>新增課堂練習</strong></h1>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
@@ -277,9 +279,16 @@ $page = $_POST['page'];
                                   name = 'div_epic'+exercise_create_input_number;
                                   ediv_form.setAttribute("id",name);
 
-                                  var elb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">習題'+exercise_create_input_number+'題目 :</label>'+
+                                  var elb =
+                                          '<div class="form-group">'+
+                                          '<label class="control-label col-md-3 col-sm-3 col-xs-12">習題'+exercise_create_input_number+'標題 :<span class="required"></span></label>'+
+                                           '<div class="col-md-5 col-sm-5 col-xs-5">'+
+                                              '<input type="text" class="form-control" name="exercise_title[]" required="required" placeholder="請輸入標題(請盡量簡短 ex:水果、房子...)">'+
+                                           '</div>'+
+                                           '</div>'+
+                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">習題'+exercise_create_input_number+'題目 :<span class="required"></span></label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<input type="text" class="form-control" name="exercise_content[]">'+
+                                              '<input type="text" class="form-control" name="exercise_content[]" required="required">'+
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳習題'+exercise_create_input_number+'圖檔 :</label>'+
                                            '<input type="file" name="E'+exercise_create_input_number+'Q1_file"><br />'+
@@ -346,6 +355,64 @@ $page = $_POST['page'];
                                       document.getElementById("exercise_number").value=exercise_create_input_number;
                                       }
                                   }
+                        </script>
+
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h1><strong>新增音檔</strong></h1>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <form class="form-horizontal form-label-left input_mask" method="post" action="" enctype="multipart/form-data" onKeyDown="if (event.keyCode == 13) {return false;}">
+                      <div class="form-horizontal form-label-left">
+                        <div class="form-group">
+                          <label class="control-label col-md-3" for="first-name">增減音檔 : </label>
+                          <button type="button" class="btn btn-success" onclick="addInputAudio()">+</button>
+                          <button type="button" class="btn btn-danger" onclick="subInputAudio()">-</button>
+                        </div>
+
+                        <div id="audio"></div>
+                        <input type="hidden" name="audio_number"  id="audio_number">
+
+                        <script type="text/javascript">
+                        var audio_create_input_number = 0;
+
+                        function addInputAudio() {
+                                  audio_create_input_number++;
+                                  var adiv_form = document.createElement("DIV");
+                                  adiv_form.setAttribute("class","form-group");
+                                  name = 'div_apic'+audio_create_input_number;
+                                  adiv_form.setAttribute("id",name);
+
+                                  var lb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">音檔'+audio_create_input_number+'標題 :</label>'+
+                                           '<div class="col-md-8 col-sm-8 col-xs-10">'+
+                                              '<input type="text" class="form-control" required="required" name="audio_title[]">'+
+                                           '</div>'+
+                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳音檔'+audio_create_input_number+' :</label>'+
+                                           '<input type="file" name="Audio'+audio_create_input_number+'_file" required /><br />';
+
+
+                                  adiv_form.innerHTML = lb;
+                                  document.getElementById("audio").appendChild(adiv_form);
+                                  document.getElementById("audio_number").value=audio_create_input_number;
+                                  }
+
+                        function subInputAudio() {
+                                    if(audio_create_input_number>0)
+                                      {
+                                        _name = 'div_apic'+audio_create_input_number;
+                                      document.getElementById(_name).remove();
+                                      audio_create_input_number--;
+                                      document.getElementById("audio_number").value=audio_create_input_number;
+                                      }
+                                  }
+
                         </script>
 
                       </div>

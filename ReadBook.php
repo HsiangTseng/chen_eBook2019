@@ -45,42 +45,21 @@
 
 
             <style type="text/css">
-            .book_title{
+            p1{
               color: black;
-              font-size: 50px;
+              font-size: 28px;
               font-family: DFKai-sb;
               line-height: 40px;
               word-wrap: break-word;
               word-break: break-all;
+              background-color: #FFFFFF;
             }
-            .book_content{
-              color: black;
-              font-size: 30px;
-              font-family: DFKai-sb;
-              line-height: 40px;
-              word-wrap: break-word;
-              word-break: break-all;
-            }
-
             .media_content{
               color: black;
               font-size: 20px;
               font-family: DFKai-sb;
               word-wrap: break-word;
               word-break: break-all;
-            }
-
-            .blockquote2{
-              display: block;
-              font-size: 15px;
-              line-height: 1.4;
-              color: #666;
-              background-color: #FFFFFF;
-              padding: 15px;
-              border-left: 5px solid #008B45;
-              border-right: 2px solid #008B45;
-              box-shadow: 2px 2px 15px #ccc;
-              height: 100%;
             }
 
             .pagination {
@@ -115,6 +94,7 @@
             }
 
             .pagination a:hover:not(.active) {background-color: #ddd;}
+
           </style>
 
           </head>
@@ -137,13 +117,19 @@
             </div>
 
             <div class="clearfix"></div-->
-
+            <?php
+            //GET THE TITLE AND Content
+            $sql = "SELECT * FROM `Book` WHERE `book_id` = $book_id ";
+            $result = mysqli_fetch_object($db->query($sql));
+            $main_title = $result->main_title;
+            $sub_title = $result->sub_title;
+            ?>
             <div class="row">
               <!-- LEFT HALF BLOCK-->
               <div class="col-md-8" id="div_content">
                 <div class="x_panel" style="height:91vh;">
                   <div class="x_title">
-                    <h2><b>課文內容 &nbsp&nbsp</b></h2>
+                    <h2 id="title-bar"><b><? echo $main_title.'-'.$sub_title.'&nbsp&nbsp&nbsp&nbsp'?></b></h2>
                       <!-- Start pagination-->
                         <div class="pagination" style="margin:0px auto;">
                           <?php
@@ -166,100 +152,81 @@
                             }
                           }
                            ?>
-                           <button onclick="hide()">hide</button>
-                           <button onclick="show()">show</button>
-                           <script>
-                             function hide()
-                             {
-                               document.getElementById("div_media").style.display = "none";
-                               document.getElementById("div_practice").style.display = "none";
-                               document.getElementById("div_content").classList.add('col-md-12');
-                               document.getElementById("div_content").classList.remove('col-md-8');
-                             }
-                             function show()
-                             {
-                               document.getElementById("div_media").style.display = "block";
-                               document.getElementById("div_practice").style.display = "block";
-                               document.getElementById("div_content").classList.add('col-md-8');
-                               document.getElementById("div_content").classList.remove('col-md-12');
-                             }
-                           </script>
                         </div>
+                       <input type="button" class="btn-info" onclick="hide()" value="縮小" style="float: right; font-size:20px;">
+                       <input type="button" class="btn-info" onclick="show()" value="展開" style="float: right; font-size:20px;">
+                       <input type="button" class="btn-info" onclick="Open_Material()" value="教材" style="float: right; font-size:20px;">
+                       <input type="button" class="btn-info" onclick="Open_Audio()" value="音檔" style="float: right; font-size:20px;">
+
+                       <script>
+                         function hide()
+                         {
+                           document.getElementById("div_media").style.display = "none";
+                           document.getElementById("div_practice").style.display = "none";
+                           document.getElementById("div_content").classList.add('col-md-12');
+                           document.getElementById("div_content").classList.remove('col-md-8');
+                         }
+                         function show()
+                         {
+                           document.getElementById("div_media").style.display = "block";
+                           document.getElementById("div_practice").style.display = "block";
+                           document.getElementById("div_content").classList.add('col-md-8');
+                           document.getElementById("div_content").classList.remove('col-md-12');
+                         }
+                       </script>
                       <!-- End pagination-->
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
-                    <div class="col-md-12 col-lg-12 col-sm-7">
-                      <!-- Strat Blockquote -->
-                      <?php
 
-                      //GET THE TITLE AND Content
-                      $sql = "SELECT * FROM `Book` WHERE `book_id` = $book_id ";
-                      $result = mysqli_fetch_object($db->query($sql));
-                      $main_title = $result->main_title;
-                      $sub_title = $result->sub_title;
+                  <?php
 
-                      $sql2 = "SELECT * FROM `Page` WHERE `book_id` = $book_id AND `page_no` = $page ";
-                      $result2 = mysqli_fetch_object($db->query($sql2));
-                      $content = $result2->content;
+                  //GET THE TITLE AND Content
+                  $sql = "SELECT * FROM `Book` WHERE `book_id` = $book_id ";
+                  $result = mysqli_fetch_object($db->query($sql));
+                  $main_title = $result->main_title;
+                  $sub_title = $result->sub_title;
 
-                      //GET THE MATERIAL DATA
-                      $material_title = array();
-                      $material_img = array();
-                      $material_content = array();
-                      $sql3 = "SELECT * FROM `TeachMaterial` WHERE `book_id` = $book_id";
-                      if($stmt = $db->query($sql3))
+                  $sql2 = "SELECT * FROM `Page` WHERE `book_id` = $book_id AND `page_no` = $page ";
+                  $result2 = mysqli_fetch_object($db->query($sql2));
+                  $content = $result2->content;
+                  $background_image = "";
+                  $background_image = $result2->picture_ext;
+
+                  //GET THE MATERIAL DATA
+                  $material_title = array();
+                  $material_img = array();
+                  $material_content = array();
+                  $sql3 = "SELECT * FROM `TeachMaterial` WHERE `book_id` = $book_id";
+                  if($stmt = $db->query($sql3))
+                  {
+                      $material_index = 0;
+                      while($result3 = mysqli_fetch_object($stmt))
                       {
-                          $material_index = 0;
-                          while($result3 = mysqli_fetch_object($stmt))
-                          {
-                            $material_title[$material_index]=$result3->title;
-                            $material_content[$material_index]=$result3->content;
-                            $material_img[$material_index]=$result3->img;
-                            $material_index++;
-                          }
-                     }
+                        $material_title[$material_index]=$result3->title;
+                        $material_content[$material_index]=$result3->content;
+                        $material_img[$material_index]=$result3->img;
+                        $material_index++;
+                      }
+                 }
 
+                   //REPLACE THE WORD TO MATERIAL'URL
+                   foreach ($material_title as $key => $value) {
                      //REPLACE THE WORD TO MATERIAL'URL
-                     foreach ($material_title as $key => $value) {
-                       //REPLACE THE WORD TO MATERIAL'URL
-                       $old_word = $material_title[$key];
-                       $url_word = '<a href="javascript: void(0)" onclick="Show_media('.$key.')">'.$old_word.'</a>';
-                       $content = str_replace($old_word,$url_word,$content);
-                     }
+                     $old_word = $material_title[$key];
+                     $url_word = '<a href="javascript: void(0)" onclick="Show_media('.$key.')">'.$old_word.'</a>';
+                     $content = str_replace($old_word,$url_word,$content);
+                   }
 
-                     ?>
+                   ?>
+                  <div class="x_content"  >
+                    <div class="col-md-12 col-lg-12 col-sm-7" style="background-image: url('<? echo 'upload/'.$background_image;?>'); height:80vh; background-size: contain; background-repeat:no-repeat;">
 
-
-                      <blockquote class="blockquote2">
-                        <p class="book_title"><?php echo $main_title;?></p>
-                        <p class="book_title"><?php echo $sub_title;?></p>
-                        <br />
-                        <p id="content" class="book_content" style="white-space: pre-wrap;"><?php echo $content;?></p>
-                      </blockquote>
+                      <!-- Strat Blockquote -->
+                      <p1 id="content" class="book_content" style="white-space: pre-wrap;"><?php echo $content;?></p1>
                       <!-- End Blockquote -->
 
                     </div>
 
-                    <!-- Start Material Block-->
-                    <!--div class="col-md-2 col-lg-2 col-sm-5">
-                      <h1><span class="label label-success">補充教材</span></h1>
-                          <i class="fas fa-book fa-2x"></i><a href="#" onclick='Show_media(0);' style="font-size: 20px; font-family: DFKai-sb;">果汁</a><br>
-                          <i class="fas fa-book fa-2x"></i><a href="#" onclick='Show_media(1);' style="font-size: 20px; font-family: DFKai-sb;">冰箱</a><br>
-                          <i class="fas fa-book fa-2x"></i><a href="#" onclick='Show_media(2);' style="font-size: 20px; font-family: DFKai-sb;">水壺</a><br>
-                          <i class="fas fa-book fa-2x"></i><a href="#" onclick='Show_media(3);' style="font-size: 20px; font-family: DFKai-sb;">杯子蛋糕</a><br>
-                    </div-->
-                    <!-- End Material Block-->
-
-
-                    <!-- Start Exercise Block-->
-                    <!--div class="col-md-2 col-lg-2 col-sm-5">
-                      <h1><span class="label label-info">課堂練習</span></h1>
-                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習1</a><br>
-                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習2</a><br>
-                          <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習3</a><br>
-                    </div-->
-                    <!-- End Exercise Block-->
                     <script>
                       function Show_media(index)
                       {
@@ -273,6 +240,17 @@
                         ?>
                         document.getElementById('media_content').innerHTML=media_content[index];
                         document.getElementById('media_picture').src=media_picture[index];
+                      }
+
+                      function Open_Material()
+                      {
+                          document.getElementById("audio_block").style.display = "none";
+                          document.getElementById("material_block").style.display = "block";
+                      }
+                      function Open_Audio()
+                      {
+                        document.getElementById("audio_block").style.display = "block";
+                        document.getElementById("material_block").style.display = "none";
                       }
                     </script>
 
@@ -295,14 +273,31 @@
                 </div>
 
                 <div class="x_content">
-                  <div class="col-md-12 col-lg-12 col-sm-12">
-                    <!--blockquote class="blockquote2"-->
+                  <div id="material_block" class="col-md-12 col-lg-12 col-sm-12">
                     <P id="media_content" class="media_content">
                     </P>
                     <div class="pic_frame">
                       <img id="media_picture" src="" class="pic" />
                     </div>
-                   <!--/blockquote-->
+                  </div>
+                  <div id="audio_block" class="col-md-12 col-lg-12 col-sm-12" style="display:none;">
+
+                      <?php
+                        $sql_audio = "SELECT * FROM `Audio` WHERE `book_id` = $book_id";
+                        if($stmt_audio = $db->query($sql_audio))
+                        {
+                            while($result_audio = mysqli_fetch_object($stmt_audio))
+                            {
+                              echo '<div class="from-group">';
+                                echo '<p>'.$result_audio->title.'</p>';
+                                $audio_name = $result_audio->audio_ext;
+                                echo '<audio controls>';
+                                echo '<source src="upload/'.$audio_name.'" type="audio/mpeg">';
+                                echo '</audio>';
+                              echo '</div>';
+                            }
+                        }
+                      ?>
                   </div>
                 </div>
               </div>
@@ -315,17 +310,21 @@
                 </div>
                 <div class="x_content">
                   <div class="col-md-12 col-lg-12 col-sm-12">
-                      <!--p> 課文朗讀 ：</p>
-                      <audio controls>
-                        <source src="mp3-1.mp3" type="audio/mp3">
-                      </audio>
-                      <audio controls="">
-                        <source src="mp3-2.mp3" type="audio/mp3">
-                      </audio-->
-                      <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習1</a><br>
-                      <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習2</a><br>
-                      <i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習3</a><br>
-
+                      <?php
+                        $sql4 = "SELECT * FROM `Question` WHERE `book_id` = $book_id AND `QA`='Q' ";
+                        if($stmt4 = $db->query($sql4))
+                        {
+                            $material_index = 0;
+                            while($result4 = mysqli_fetch_object($stmt4))
+                            {
+                              $url = 'http://'.$_SERVER['HTTP_HOST'].'/chen_eBook/Exercise.php';//http://XXX.XXX.XXX.XXX/chen_eBook/Exercise.php
+                              $url = $url.'?book_id='.$book_id.'&question_no='.$result4->question_no;
+                              //echo $url;
+                              //<i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習1</a><br>
+                              echo '<i class="fas fa-pencil-alt fa-2x"></i><a href="'.$url.'" style="font-size: 20px; font-family: DFKai-sb;">'.$result4->title.'</a><br>';
+                            }
+                        }
+                      ?>
                   </div>
                 </div>
               </div>
