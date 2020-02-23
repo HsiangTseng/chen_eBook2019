@@ -147,6 +147,16 @@
                             <option value="8">8頁</option>
                             <option value="9">9頁</option>
                             <option value="10">10頁</option>
+                            <option value="11">11頁</option>
+                            <option value="12">12頁</option>
+                            <option value="13">13頁</option>
+                            <option value="14">14頁</option>
+                            <option value="15">15頁</option>
+                            <option value="16">16頁</option>
+                            <option value="17">17頁</option>
+                            <option value="18">18頁</option>
+                            <option value="19">19頁</option>
+                            <option value="20">20頁</option>
                           </select>
                         </div>
                       </div>

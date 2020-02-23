@@ -121,7 +121,7 @@
                     </thead>
                     <?php
                       include("connects.php");
-                      $sql = "SELECT MAX(book_id) AS max FROM Book";
+                      $sql = "SELECT COUNT(book_id) AS max FROM Book";
                       $result = mysqli_fetch_object($db->query($sql));
                       $book_numbers = $result->max;
                       //echo $book_numbers;
@@ -130,9 +130,19 @@
                       $sub_title = array();
                       $edit_teacher = array();
                       $create_date = array();
-                      for ($i = 1 ; $i <= $book_numbers ; $i++)
+
+                      $sql_get_book_id = "SELECT book_id FROM Book WHERE 1";
+                      if($stmt_bookid = $db->query($sql_get_book_id))
                       {
-                        $sql2 = "SELECT * FROM `Book` WHERE `book_id` = $i ";
+                          while($result_bookid = mysqli_fetch_object($stmt_bookid))
+                          {
+                            array_push($book_id,$result_bookid->book_id);
+                          }
+                      }
+
+                      for ($i = 0 ; $i < count($book_id) ; $i++)
+                      {
+                        $sql2 = "SELECT * FROM `Book` WHERE `book_id` = $book_id[$i] ";
                         $result2 = mysqli_fetch_object($db->query($sql2));
                         $book_id[$i] = $result2->book_id;
                         $main_title[$i] = $result2->main_title;
@@ -144,17 +154,19 @@
                         $sub_title_to_json=json_encode((array)$sub_title);
                         $edit_teacher_to_json=json_encode((array)$edit_teacher);
                         $create_date_to_json=json_encode((array)$create_date);
+                        //echo $result2->main_title;
                       }
+
                     ?>
                     <tbody>
                       <tr>
                         <?php
-                        echo '<td>'.$book_id[1].'</td>';
-                        echo '<td>'.$main_title[1].'</td>';
-                        echo '<td>'.$sub_title[1].'</td>';
-                        echo '<td>'.$edit_teacher[1].'</td>';
-                        echo '<td>'.$create_date[1].'</td>';
-                        echo '<td><button type="submit" class="btn btn-success" onclick="btnclk(1)">閱讀</button></td>';
+                        echo '<td>'.$book_id[0].'</td>';
+                        echo '<td>'.$main_title[0].'</td>';
+                        echo '<td>'.$sub_title[0].'</td>';
+                        echo '<td>'.$edit_teacher[0].'</td>';
+                        echo '<td>'.$create_date[0].'</td>';
+                        echo '<td><button type="submit" class="btn btn-success" onclick="btnclk('.$book_id[0].')">閱讀</button></td>';
                         ?>
                       </tr>
                     </tbody>
@@ -256,7 +268,7 @@
                           var createtimeFromPHP=<? echo $create_date_to_json ?>;
 
                           var t = $('#b_list').DataTable();
-                          for (var i=2 ; i<= <?php echo "$book_numbers";?> ; i++)
+                          for (var i=1 ; i< <?php echo "$book_numbers";?> ; i++)
                           {
                             t.row.add(
                             [
@@ -265,7 +277,7 @@
                             subtitleFromPHP[i],
                             editteacherFromPHP[i],
                             createtimeFromPHP[i],
-                            "<button type=\"submit\" class=\"btn btn-success\" onclick=\"btnclk("+i+")\">閱讀</button>",
+                            "<button type=\"submit\" class=\"btn btn-success\" onclick=\"btnclk("+bookidFromPHP[i]+")\">閱讀</button>",
                             ]).draw(false);
                           }
                         }

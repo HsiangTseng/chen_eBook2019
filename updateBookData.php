@@ -67,6 +67,9 @@ $content = $_POST['content'];
 
       foreach ($material_name as $key => $value) {
         $material_no = $key+1;
+
+        $dest = '';
+        $video_dest = '';
         //IMG FILE UPLOAD_ERR_OK
         $name = 'A'.$material_no.'_file';
         $n = 'A'.$material_no;
@@ -79,7 +82,17 @@ $content = $_POST['content'];
         else {
         }
 
-        $sql3 = "INSERT INTO TeachMaterial (book_id, material_no, title, img, content) VALUES ('$max_number', '$material_no', '$material_name[$key]','$dest' ,'$material_content[$key]')";
+        $video_name = 'A'.$material_no.'video_file';
+        if ($_FILES[$video_name]['error'] === UPLOAD_ERR_OK){
+        $file = $_FILES[$video_name]['tmp_name'];
+        $video_ext[$material_no] = end(explode('.', $_FILES[$video_name]['name']));
+        $video_dest = 'upload/B'.$max_number.'M'.$material_no.'V.'.$video_ext[$material_no];
+        move_uploaded_file($file, $video_dest);
+        }
+        else {
+        }
+
+        $sql3 = "INSERT INTO TeachMaterial (book_id, material_no, title, img, video, content) VALUES ('$max_number', '$material_no', '$material_name[$key]','$dest' ,'$video_dest', '$material_content[$key]')";
         $db->query($sql3);
       }
   }
@@ -174,15 +187,15 @@ $content = $_POST['content'];
         $max_question_no = $result_m->max;
         $max_question_no = $max_question_no+1;
 
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,type,single_or_multi,CA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','Q','WORD','SINGLE','$CA[0]','$exercise_title[$key]','$exercise_content[$key]','$q1_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,type,single_or_multi,CA,title,Content,picture_ext) VALUES ('$max_number','$ca_index','Q','WORD','SINGLE','$CA[0]','$exercise_title[$key]','$exercise_content[$key]','$q1_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A1','$exercise_title[$key]','$A1[$key]','$a1_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$ca_index','A1','$exercise_title[$key]','$A1[$key]','$a1_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A2','$exercise_title[$key]','$A2[$key]','$a2_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$ca_index','A2','$exercise_title[$key]','$A2[$key]','$a2_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A3','$exercise_title[$key]','$A3[$key]','$a3_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$ca_index','A3','$exercise_title[$key]','$A3[$key]','$a3_name')";
         $db->query($sql4);
-        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$max_question_no','A4','$exercise_title[$key]','$A4[$key]','$a4_name')";
+        $sql4 = "INSERT INTO Question (book_id,question_no,QA,title,Content,picture_ext) VALUES ('$max_number','$ca_index','A4','$exercise_title[$key]','$A4[$key]','$a4_name')";
         $db->query($sql4);
       }
   }

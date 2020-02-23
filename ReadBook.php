@@ -195,6 +195,7 @@
                   //GET THE MATERIAL DATA
                   $material_title = array();
                   $material_img = array();
+                  $material_video = array();
                   $material_content = array();
                   $sql3 = "SELECT * FROM `TeachMaterial` WHERE `book_id` = $book_id";
                   if($stmt = $db->query($sql3))
@@ -205,6 +206,7 @@
                         $material_title[$material_index]=$result3->title;
                         $material_content[$material_index]=$result3->content;
                         $material_img[$material_index]=$result3->img;
+                        $material_video[$material_index]=$result3->video;
                         $material_index++;
                       }
                  }
@@ -237,9 +239,31 @@
 
                           $js_media_picture = json_encode($material_img);
                           echo "var media_picture = ".$js_media_picture.";\n";
+
+                          $js_media_video = json_encode($material_video);
+                          echo "var media_video = ".$js_media_video.";\n";
                         ?>
+
                         document.getElementById('media_content').innerHTML=media_content[index];
                         document.getElementById('media_picture').src=media_picture[index];
+
+
+                        if(media_video[index].length>3){
+                          document.getElementById("video_frame").style.display = "block";
+                          var video = document.getElementById('material_video_id');
+                          document.getElementById('media_video_source').src=media_video[index];
+                          video.load();
+                        }
+                        else {
+                          document.getElementById("video_frame").style.display = "none";
+                        }
+
+                        if(media_picture[index].length>3){
+                          document.getElementById('pic_frame_div_id').style.display = "block";
+                        }
+                        else {
+                          document.getElementById('pic_frame_div_id').style.display = "none";
+                        }
                       }
 
                       function Open_Material()
@@ -276,8 +300,13 @@
                   <div id="material_block" class="col-md-12 col-lg-12 col-sm-12">
                     <P id="media_content" class="media_content">
                     </P>
-                    <div class="pic_frame">
+                    <div class="pic_frame" id="pic_frame_div_id">
                       <img id="media_picture" src="" class="pic" />
+                    </div>
+                    <div id="video_frame" style="display:none;">
+                      <video id="material_video_id" width="320" height="240" controls>
+                        <source id="media_video_source" src="" type="video/mp4" />
+                      </video>
                     </div>
                   </div>
                   <div id="audio_block" class="col-md-12 col-lg-12 col-sm-12" style="display:none;">

@@ -14,8 +14,11 @@
 		}
 		
 	}	
-	
-	echo $old_question_no;	
+
+	$data["old_question_no"] = $old_question_no;
+	$data["old_book_id"] = $old_book_id;
+			
+	echo json_encode($data);
 	
 	$last = "UPDATE `Now_stats` SET old_book_id = ".$now_book_id." , old_question_no = ".$now_question_no."";
 	$db->query($last);

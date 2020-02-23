@@ -225,11 +225,12 @@ $page = $_POST['page'];
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳教材'+material_create_input_number+'圖檔 :</label>'+
                                            '<input type="file" name="A'+material_create_input_number+'_file"><br />'+
+                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳教材'+material_create_input_number+'影片 :</label>'+
+                                           '<input type="file" name="A'+material_create_input_number+'video_file"><br />'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">教材'+material_create_input_number+'說明 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
                                               '<textarea name="material_content[]" class="form-control" rows="5" wrap="soft" maxlength="150"></textarea>'+
                                            '</div>';
-
                                   div_form.innerHTML = lb;
                                   document.getElementById("material").appendChild(div_form);
                                   document.getElementById("material_number").value=material_create_input_number;

@@ -2,7 +2,9 @@
 <?php 
 	session_start();
 	$start_time = microtime(true);
-	$_SESSION["show_label"] = null;
+	if(!isset($_SESSION["show_label"])){
+		$_SESSION["show_label"] = null;
+	}
 ?>
 
 <?php
@@ -188,7 +190,9 @@
                                                         <label id="label_show">
 								<?php 
 									if($_SESSION["show_label"] != null){
-										echo $_SESSION["show_label"];
+										$label_show = $_SESSION["show_label"];
+										echo $label_show;
+										unset($_SESSION["show_label"]);
 									}
 
 								?>
@@ -208,7 +212,6 @@
 							function set_question(){
 								if(last_book_id != now_book_id){
 									//跳至下一題									
-									if(last_question_no != now_question_no){
 										$.ajax(
 										{
 											type:"POST",
@@ -216,26 +219,24 @@
 										}
 										).done(function(msg){});
 										window.location.reload();			
-									}
-																				
 								}
-								else{
-									if(last_question_no != now_question_no){
-										 $.ajax(
-	                                                                        {
-	                                                                                type:"POST",
-	                                                                                url:"mobile_reset.php"	
-                	                                                        }
-        	                                                                ).done(function(msg){});
-                        	                                                window.location.reload();
-									}
+								if(last_question_no != now_question_no){
+									$.ajax(
+                                                                                {
+                                                                                        type:"POST",
+                                                                                        url:"mobile_reset.php"
+                                                                                }
+                                                                                ).done(function(msg){});
+                                                                                window.location.reload();
 								}
 								$.ajax(
 								{
 									type:"POST",
 									url:"mobile_reset.php",
+									dataType:"JSON",
 									success:function(data){
-										last_question_no = data;
+										last_question_no = data.old_question_no;
+										last_book_id = data.old_book_id;
 									}
 								});
 							}
