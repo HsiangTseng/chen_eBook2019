@@ -253,6 +253,38 @@ $page = $_POST['page'];
                 </div>
               </div>
 
+
+              <?php
+              // FOR GET EXERCISE DDL
+              include("connects.php");
+              $sql = "SELECT MAX(question_no) AS max FROM Question";
+              $result = mysqli_fetch_object($db->query($sql));
+              $max_question_number = $result->max;
+
+              $question_number = array();
+              $question_content = array();
+              $index = 1;
+              $sql = "SELECT * FROM Question WHERE QA = 'Q' ORDER BY type DESC ,single_or_multi DESC";
+              if($stmt = $db->query($sql))
+              {
+                  while($result = mysqli_fetch_object($stmt))
+                  {
+                      $question_content[$index] = $result->Content;
+                      $question_number[$index] = $result->question_no;
+                      $index++;
+                  }
+              }
+              function ddl_content()
+              {
+                global $max_question_number,$question_number, $question_content;
+                for ($i = 1 ; $i < $max_question_number ; $i++)
+                {
+                  echo '<option value="'.$question_number[$i].'">'.$question_content[$i].'</option>';
+                }
+              }
+
+              ?>
+
               <div class="col-md-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -269,7 +301,6 @@ $page = $_POST['page'];
                         </div>
 
                         <div id="exercise"></div>
-
                         <input type="hidden" name="exercise_number"  id="exercise_number">
                         <script>
                         var exercise_create_input_number = 0;
@@ -282,65 +313,13 @@ $page = $_POST['page'];
 
                                   var elb =
                                           '<div class="form-group">'+
-                                          '<label class="control-label col-md-3 col-sm-3 col-xs-12">習題'+exercise_create_input_number+'標題 :<span class="required"></span></label>'+
-                                           '<div class="col-md-5 col-sm-5 col-xs-5">'+
-                                              '<input type="text" class="form-control" name="exercise_title[]" required="required" placeholder="請輸入標題(請盡量簡短 ex:水果、房子...)">'+
-                                           '</div>'+
-                                           '</div>'+
-                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">習題'+exercise_create_input_number+'題目 :<span class="required"></span></label>'+
-                                           '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<input type="text" class="form-control" name="exercise_content[]" required="required">'+
-                                           '</div>'+
-                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳習題'+exercise_create_input_number+'圖檔 :</label>'+
-                                           '<input type="file" name="E'+exercise_create_input_number+'Q1_file"><br />'+
-                                           '<div class="form-group">'+
-
-                                             '<label class="control-label col-md-3" for="last-name">選項(A) :<span class="required"></span></label>'+
-                                             '<div class="col-md-5">'+
-                                                 '<input type="text"  name="A1[]" required="required" class="form-control col-md-7 col-xs-12">'+
-                                             '</div>'+
-                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
-                                             '<div class="col-md-3">'+
-                                                 '<input type="file" name="E'+exercise_create_input_number+'A1_file"/>'+
-                                             '</div>'+
-                                           '</div>'+
-                                           '<div class="form-group">'+
-                                             '<label class="control-label col-md-3" for="last-name">選項(B) :<span class="required"></span></label>'+
-                                             '<div class="col-md-5">'+
-                                                 '<input type="text"  name="A2[]" required="required" class="form-control col-md-7 col-xs-12">'+
-                                             '</div>'+
-                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
-                                             '<div class="col-md-3">'+
-                                                 '<input type="file" name="E'+exercise_create_input_number+'A2_file"/>'+
-                                             '</div>'+
-                                           '</div>'+
-
-                                           '<div class="form-group">'+
-                                             '<label class="control-label col-md-3" for="last-name">選項(C) :<span class="required"></span></label>'+
-                                             '<div class="col-md-5">'+
-                                                 '<input type="text"  name="A3[]" required="required" class="form-control col-md-7 col-xs-12">'+
-                                             '</div>'+
-                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
-                                             '<div class="col-md-3">'+
-                                                 '<input type="file" name="E'+exercise_create_input_number+'A3_file"/>'+
-                                             '</div>'+
-                                           '</div>'+
-                                           '<div class="form-group">'+
-                                             '<label class="control-label col-md-3" for="last-name">選項(D) :<span class="required"></span></label>'+
-                                             '<div class="col-md-5">'+
-                                                 '<input type="text"  name="A4[]" required="required" class="form-control col-md-7 col-xs-12">'+
-                                             '</div>'+
-                                             '<label class="control-label col-md-1" for="last-name">圖檔:<span></span></label>'+
-                                             '<div class="col-md-3">'+
-                                                 '<input type="file" name="E'+exercise_create_input_number+'A4_file"/>'+
-                                             '</div>'+
-                                           '</div>'+
-                                           '<label class="control-label col-md-3" for="first-name">正解 :<span class="required"></span></label>'+
-                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A1" required><label>A選項</label>'+
-                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A2"><label>B選項</label>'+
-                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A3"><label>C選項</label>'+
-                                           '<input type="radio" class="radio-inline flat" name="answer'+exercise_create_input_number+'[]" value="A4"><label>D選項</label>'+
-                                           '<hr />';
+                                          '<label class="control-label col-md-3 col-sm-3 col-xs-12">第'+exercise_create_input_number+'題</label>'+
+                                            '<div class="col-md-9 col-sm-9 col-xs-12">'+
+                                              '<select class="select2_single form-control" name="Question_ddl[]" tabindex="-1" required>'+
+                                                '<?php ddl_content();?>'+
+                                              '</select>'+
+                                            '</div>'+
+                                          '</div>';
 
 
                                   ediv_form.innerHTML = elb;

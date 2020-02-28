@@ -90,7 +90,7 @@
                   <div class="x_content">
                     <div class="col-md-12 col-lg-12 col-sm-7">
                       <?php
-                        $sql = "SELECT * FROM `Question` WHERE `book_id` = $book_id AND `QA`='Q' AND `question_no` = $question_no";
+                        $sql = "SELECT * FROM `Question` WHERE `question_no` = $question_no AND `QA` = 'Q' ";
                         if($stmt = $db->query($sql))
                         {
                             while($result = mysqli_fetch_object($stmt))

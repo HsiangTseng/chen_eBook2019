@@ -340,19 +340,21 @@
                 <div class="x_content">
                   <div class="col-md-12 col-lg-12 col-sm-12">
                       <?php
-                        $sql4 = "SELECT * FROM `Question` WHERE `book_id` = $book_id AND `QA`='Q' ";
-                        if($stmt4 = $db->query($sql4))
-                        {
-                            $material_index = 0;
-                            while($result4 = mysqli_fetch_object($stmt4))
-                            {
-                              $url = 'http://'.$_SERVER['HTTP_HOST'].'/chen_eBook/Exercise.php';//http://XXX.XXX.XXX.XXX/chen_eBook/Exercise.php
-                              $url = $url.'?book_id='.$book_id.'&question_no='.$result4->question_no;
-                              //echo $url;
-                              //<i class="fas fa-pencil-alt fa-2x"></i><a href="#" style="font-size: 20px; font-family: DFKai-sb;">短句練習1</a><br>
-                              echo '<i class="fas fa-pencil-alt fa-2x"></i><a href="'.$url.'" style="font-size: 20px; font-family: DFKai-sb;">'.$result4->title.'</a><br>';
-                            }
+                        $sql4 = "SELECT question FROM `Book` WHERE `book_id` = $book_id ";
+                        $result4 = mysqli_fetch_object($db->query($sql4));
+                        $question_str = $result4->question;
+                        $question_array = explode("-",$question_str);
+
+                        foreach ($question_array as $key => $value) {
+                          $url = 'http://'.$_SERVER['HTTP_HOST'].'/chen_eBook/Exercise.php';//http://XXX.XXX.XXX.XXX/chen_eBook/Exercise.php
+                          $url = $url.'?book_id='.$book_id.'&question_no='.$question_array[$key];
+
+                          $sql5 = "SELECT title FROM `Question` WHERE `question_no` = $question_array[$key] ";
+                          $result5 = mysqli_fetch_object($db->query($sql5));
+                          $q_title = $result5->title;
+                          echo '<i class="fas fa-pencil-alt fa-2x"></i><a href="'.$url.'" style="font-size: 20px; font-family: DFKai-sb;">'.$q_title.'</a><br>';
                         }
+
                       ?>
                   </div>
                 </div>
