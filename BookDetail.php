@@ -221,7 +221,7 @@ $page = $_POST['page'];
 
                                   var lb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">教材'+material_create_input_number+'名稱 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<input type="text" class="form-control" name="material_name[]">'+
+                                              '<input type="text" placeholder="教材名稱請與課文詞彙相同" class="form-control" name="material_name[]">'+
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳教材'+material_create_input_number+'圖檔 :</label>'+
                                            '<input type="file" name="A'+material_create_input_number+'_file"><br />'+
@@ -372,7 +372,7 @@ $page = $_POST['page'];
 
                                   var lb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">音檔'+audio_create_input_number+'標題 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<input type="text" class="form-control" required="required" name="audio_title[]">'+
+                                              '<input type="text" class="form-control" placeholder="教材名稱請與課文詞彙相同"  required="required" name="audio_title[]">'+
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳音檔'+audio_create_input_number+' :</label>'+
                                            '<input type="file" name="Audio'+audio_create_input_number+'_file" required /><br />';

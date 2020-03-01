@@ -152,13 +152,63 @@
                             }
                           }
                            ?>
-                        </div>
-                       <input type="button" class="btn-info" onclick="hide()" value="縮小" style="float: right; font-size:20px;">
-                       <input type="button" class="btn-info" onclick="show()" value="展開" style="float: right; font-size:20px;">
-                       <input type="button" class="btn-info" onclick="Open_Material()" value="教材" style="float: right; font-size:20px;">
-                       <input type="button" class="btn-info" onclick="Open_Audio()" value="音檔" style="float: right; font-size:20px;">
 
-                       <script>
+                           <?php
+
+                           //GET THE TITLE AND Content
+                           $sql = "SELECT * FROM `Book` WHERE `book_id` = $book_id ";
+                           $result = mysqli_fetch_object($db->query($sql));
+                           $main_title = $result->main_title;
+                           $sub_title = $result->sub_title;
+
+                           $sql2 = "SELECT * FROM `Page` WHERE `book_id` = $book_id AND `page_no` = $page ";
+                           $result2 = mysqli_fetch_object($db->query($sql2));
+                           $content = $result2->content;
+                           $background_image = "";
+                           $background_image = $result2->picture_ext;
+
+                           //GET THE MATERIAL DATA
+                           $material_title = array();
+                           $material_img = array();
+                           $material_video = array();
+                           $material_content = array();
+                           $sql3 = "SELECT * FROM `TeachMaterial` WHERE `book_id` = $book_id";
+                           if($stmt = $db->query($sql3))
+                           {
+                               $material_index = 0;
+                               while($result3 = mysqli_fetch_object($stmt))
+                               {
+                                 $material_title[$material_index]=$result3->title;
+                                 $material_content[$material_index]=$result3->content;
+                                 $material_img[$material_index]=$result3->img;
+                                 $material_video[$material_index]=$result3->video;
+                                 $material_index++;
+                               }
+                           }
+
+                          //GET THE AUDIO DataTable
+                          $audio_title = array();
+                          $audio_ext = array();
+                          $sql4 = "SELECT * FROM `Audio` WHERE `book_id` = $book_id";
+                          if($stmt = $db->query($sql4))
+                          {
+                              $audio_index = 0;
+                              while($result4 = mysqli_fetch_object($stmt))
+                              {
+                                $audio_title[$audio_index]=$result4->title;
+                                $audio_ext[$audio_index]=$result4->audio_ext;
+
+                                $audio_index++;
+                              }
+                          }
+
+
+
+                           ?>
+                        </div>
+
+                       <script type="text/javascript">
+
                          function hide()
                          {
                            document.getElementById("div_media").style.display = "none";
@@ -173,53 +223,74 @@
                            document.getElementById("div_content").classList.add('col-md-8');
                            document.getElementById("div_content").classList.remove('col-md-12');
                          }
+                         function font_big()
+                         {
+                           var bookcontent = document.getElementById("content");
+                           var control_style = window.getComputedStyle(bookcontent,null).getPropertyValue('font-size');
+                           var fontSize = parseFloat(control_style);
+                           bookcontent.style.fontSize = (fontSize + 3) + 'px';
+                         }
+
+                         function font_small()
+                         {
+                           var bookcontent = document.getElementById("content");
+                           var control_style = window.getComputedStyle(bookcontent,null).getPropertyValue('font-size');
+                           var fontSize = parseFloat(control_style);
+                           bookcontent.style.fontSize = (fontSize - 3) + 'px';
+                         }
+                         function font_opacity_off()
+                         {
+                           document.getElementById("content").style.opacity = "0";
+                         }
+                         function font_opacity_on()
+                         {
+                           document.getElementById("content").style.opacity = "1";
+                         }
+                         function ReplaceMeterialJS()
+                         {
+                           var book_id = <?php echo $book_id;?>;
+                           var page_no = <?php echo $page;?>;
+                           $.ajax
+                                (
+                                   {
+                                   type: "POST",
+                                   url: "ReplaceBookContent.php",
+                                   dataType:"text",
+                                   data: { replaceType:'M',book_id:book_id, page_no:page_no  },
+                                   success:function(msg)
+                                     {
+                                       document.getElementById('content').innerHTML=msg;
+                                     }
+                                   }
+                                )
+                         }
+                         function ReplaceAudioJS()
+                         {
+                           var book_id = <?php echo $book_id;?>;
+                           var page_no = <?php echo $page;?>;
+                           var now_content = document.getElementById('content').innerHTML;
+                           $.ajax
+                                (
+                                   {
+                                   type: "POST",
+                                   url: "ReplaceBookContent.php",
+                                   dataType:"text",
+                                   data: { replaceType:'A',book_id:book_id, page_no:page_no  },
+                                   success:function(msg)
+                                     {
+                                       document.getElementById('content').innerHTML=msg;
+                                     }
+                                   }
+                                )
+                         }
+
+
                        </script>
                       <!-- End pagination-->
                     <div class="clearfix"></div>
                   </div>
 
-                  <?php
 
-                  //GET THE TITLE AND Content
-                  $sql = "SELECT * FROM `Book` WHERE `book_id` = $book_id ";
-                  $result = mysqli_fetch_object($db->query($sql));
-                  $main_title = $result->main_title;
-                  $sub_title = $result->sub_title;
-
-                  $sql2 = "SELECT * FROM `Page` WHERE `book_id` = $book_id AND `page_no` = $page ";
-                  $result2 = mysqli_fetch_object($db->query($sql2));
-                  $content = $result2->content;
-                  $background_image = "";
-                  $background_image = $result2->picture_ext;
-
-                  //GET THE MATERIAL DATA
-                  $material_title = array();
-                  $material_img = array();
-                  $material_video = array();
-                  $material_content = array();
-                  $sql3 = "SELECT * FROM `TeachMaterial` WHERE `book_id` = $book_id";
-                  if($stmt = $db->query($sql3))
-                  {
-                      $material_index = 0;
-                      while($result3 = mysqli_fetch_object($stmt))
-                      {
-                        $material_title[$material_index]=$result3->title;
-                        $material_content[$material_index]=$result3->content;
-                        $material_img[$material_index]=$result3->img;
-                        $material_video[$material_index]=$result3->video;
-                        $material_index++;
-                      }
-                 }
-
-                   //REPLACE THE WORD TO MATERIAL'URL
-                   foreach ($material_title as $key => $value) {
-                     //REPLACE THE WORD TO MATERIAL'URL
-                     $old_word = $material_title[$key];
-                     $url_word = '<a href="javascript: void(0)" onclick="Show_media('.$key.')">'.$old_word.'</a>';
-                     $content = str_replace($old_word,$url_word,$content);
-                   }
-
-                   ?>
                   <div class="x_content"  >
                     <div class="col-md-12 col-lg-12 col-sm-7" style="background-image: url('<? echo 'upload/'.$background_image;?>'); height:80vh; background-size: contain; background-repeat:no-repeat;">
 
@@ -247,7 +318,8 @@
                         document.getElementById('media_content').innerHTML=media_content[index];
                         document.getElementById('media_picture').src=media_picture[index];
 
-
+                        document.getElementById("material_block").style.display = "block";
+                        document.getElementById("audio_block").style.display = "none";
                         if(media_video[index].length>3){
                           document.getElementById("video_frame").style.display = "block";
                           var video = document.getElementById('material_video_id');
@@ -266,6 +338,26 @@
                         }
                       }
 
+                      function Show_Audio(index)
+                      {
+                        <?php
+                        $js_audio_title = json_encode($audio_title);
+                        echo "var audio_title = ".$js_audio_title.";\n";
+
+                        $js_audio_ext = json_encode($audio_ext);
+                        echo "var audio_ext = ".$js_audio_ext.";\n";
+                        ?>
+                        document.getElementById('pic_frame_div_id').style.display = "none";
+                        document.getElementById("video_frame").style.display = "none";
+                        document.getElementById("material_block").style.display = "none";
+                        document.getElementById("audio_block").style.display = "block";
+
+                        document.getElementById('audio_title').innerHTML=audio_title[index];
+                        document.getElementById('audio_src').src="upload/"+audio_ext[index];
+                        var audio = document.getElementById('audio_id');
+                        audio.load();
+                      }
+
                       function Open_Material()
                       {
                           document.getElementById("audio_block").style.display = "none";
@@ -278,7 +370,12 @@
                       }
                     </script>
 
-
+                    <input type="button" class="btn-info" onclick="font_opacity_off()" value="隱藏" style="float: left; font-size:20px;">
+                    <input type="button" class="btn-info" onclick="font_opacity_on()" value="顯示" style="float: left; font-size:20px;">
+                    <input type="button" class="btn-info" onclick="font_big()" value="字大" style="float: left; font-size:20px;">
+                    <input type="button" class="btn-info" onclick="font_small()" value="字小" style="float: left; font-size:20px;">
+                    <input type="button" class="btn-info" onclick="ReplaceMeterialJS()" value="教材" style="float: left; font-size:20px;">
+                    <input type="button" class="btn-info" onclick="ReplaceAudioJS()" value="音檔" style="float: left; font-size:20px;">
                     <div class="clearfix">
 
 
@@ -310,23 +407,12 @@
                     </div>
                   </div>
                   <div id="audio_block" class="col-md-12 col-lg-12 col-sm-12" style="display:none;">
-
-                      <?php
-                        $sql_audio = "SELECT * FROM `Audio` WHERE `book_id` = $book_id";
-                        if($stmt_audio = $db->query($sql_audio))
-                        {
-                            while($result_audio = mysqli_fetch_object($stmt_audio))
-                            {
-                              echo '<div class="from-group">';
-                                echo '<p>'.$result_audio->title.'</p>';
-                                $audio_name = $result_audio->audio_ext;
-                                echo '<audio controls>';
-                                echo '<source src="upload/'.$audio_name.'" type="audio/mpeg">';
-                                echo '</audio>';
-                              echo '</div>';
-                            }
-                        }
-                      ?>
+                      <div class="form-group">
+                        <p id="audio_title">Ttile</p>
+                        <audio id="audio_id" controls>
+                          <source id="audio_src" src="" type="audio/mpeg" />
+                        </audio>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -344,16 +430,19 @@
                         $result4 = mysqli_fetch_object($db->query($sql4));
                         $question_str = $result4->question;
                         $question_array = explode("-",$question_str);
+                        if($question_array[0]!="")
+                        {
+                          foreach ($question_array as $key => $value) {
+                            $url = 'http://'.$_SERVER['HTTP_HOST'].'/chen_eBook/Exercise.php';//http://XXX.XXX.XXX.XXX/chen_eBook/Exercise.php
+                            $url = $url.'?book_id='.$book_id.'&question_no='.$question_array[$key];
 
-                        foreach ($question_array as $key => $value) {
-                          $url = 'http://'.$_SERVER['HTTP_HOST'].'/chen_eBook/Exercise.php';//http://XXX.XXX.XXX.XXX/chen_eBook/Exercise.php
-                          $url = $url.'?book_id='.$book_id.'&question_no='.$question_array[$key];
-
-                          $sql5 = "SELECT title FROM `Question` WHERE `question_no` = $question_array[$key] ";
-                          $result5 = mysqli_fetch_object($db->query($sql5));
-                          $q_title = $result5->title;
-                          echo '<i class="fas fa-pencil-alt fa-2x"></i><a href="'.$url.'" style="font-size: 20px; font-family: DFKai-sb;">'.$q_title.'</a><br>';
+                            $sql5 = "SELECT title FROM `Question` WHERE `question_no` = $question_array[$key] ";
+                            $result5 = mysqli_fetch_object($db->query($sql5));
+                            $q_title = $result5->title;
+                            echo '<i class="fas fa-pencil-alt fa-2x"></i><a href="'.$url.'" style="font-size: 20px; font-family: DFKai-sb;">'.$q_title.'</a><br>';
+                          }
                         }
+
 
                       ?>
                   </div>

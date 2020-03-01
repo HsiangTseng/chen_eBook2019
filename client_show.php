@@ -287,7 +287,7 @@
 							div_form.setAttribute("style","height:100%;")
 							newid = 'show' + id;
 							div_form.setAttribute("id",newid);
-							var lb = '<img class="show-img" src=' + placeholder + '>';
+							var lb = '<img class="show-img" src=upload/' + placeholder + '>';
 							div_form.innerHTML = lb;	
 							document.getElementById("input").appendChild(div_form);							
 							arrvalue.push(value);							

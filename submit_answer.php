@@ -6,14 +6,13 @@
 
 	if($stmt = $db->query($sql_get_id)){
 		while($result = mysqli_fetch_object($stmt)){
-			$book_id = $result->book_id;
 			$question_no = $result->question_no;
 		}
 	}
 
 
 
-	$Answer_sql = "Select CA from Question Where book_id ='".$book_id."' and question_no ='".$question_no."'";
+	$Answer_sql = "Select CA from Question Where question_no ='".$question_no."'";
 	$stmt1 = $db->query($Answer_sql);
 	$result = mysqli_fetch_object($stmt1);
 	$Answer = $result->CA;
@@ -25,17 +24,30 @@
 		//獲得此題答案
 		$This_answer_get='';
 		$answer_start_time = '';
-
-		if(!empty($_POST['value'])){
-			$answer_start_time = $_POST['hidden_time'];
-			foreach($_POST['value'] as $value){
+		
+		if(!empty($_POST['hidden'])){
+                        $answer_start_time = $_POST['hidden_time'];
+                        $This_answer_get = $_POST['hidden'];
+                        foreach($_POST['hidden'] as $value){
 				if($This_answer_get != ''){
-					$This_answer_get = $This_answer_get.',';
+	                                $This_answer_get = $This_answer_get.',';
 				}
 				$This_answer_get = $This_answer_get.$value;
-			}
+                        }
+                }
+		
+		 elseif(!empty($_POST['value'])){
+                        $answer_start_time = $_POST['hidden_time'];
+                        foreach($_POST['value'] as $value){
+                                if($This_answer_get != ''){
+                                        $This_answer_get = $This_answer_get.',';
+                                }
+                                $This_answer_get = $This_answer_get.$value;
+                        }
 
-		}
+                }
+
+
 		if($This_answer_get != ''){
 			$answer_end_time = microtime(true);
 			$answer_time = round($answer_end_time - $answer_start_time);
