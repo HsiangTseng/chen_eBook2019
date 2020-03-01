@@ -277,7 +277,7 @@ $page = $_POST['page'];
               function ddl_content()
               {
                 global $max_question_number,$question_number, $question_content;
-                for ($i = 1 ; $i < $max_question_number ; $i++)
+                for ($i = 1 ; $i <= $max_question_number ; $i++)
                 {
                   echo '<option value="'.$question_number[$i].'">'.$question_content[$i].'</option>';
                 }
