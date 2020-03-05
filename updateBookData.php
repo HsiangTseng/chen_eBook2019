@@ -38,33 +38,99 @@ $content = $_POST['content'];
   }
 
   // INSERT BOOK DataTable
-  $sql2 = "INSERT INTO Book (book_id, main_title, sub_title, edit_teacher, pages, question, create_date) VALUES ('$max_number', '$main_title', '$sub_title', '$edit_teacher', '$page', '$Q_ddl', '$date1')";
-  $db->query($sql2);
-
-  //INSERT PAGE DatTable
-  foreach ($content as $key => $value) {
-    //IMG FILE UPLOAD_ERR_OK
-    $page_index = $key;
-    $page_index++;
-    $page_img_name = 'P'.$page_index.'_file';
-    $page_img_output_name = "";
-
-    if ($_FILES[$page_img_name]['error'] === UPLOAD_ERR_OK){
-    $file = $_FILES[$page_img_name]['tmp_name'];
-    $ext[$page_index] = end(explode('.', $_FILES[$page_img_name]['name']));
-    $dest = 'upload/B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
-    $page_img_output_name = 'B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
-    move_uploaded_file($file, $dest);
-    }
-    else {
-    }
-    $page_number = $key;
-    $page_number ++;
-    $sql3 = "INSERT INTO Page (book_id, page_no, content,picture_ext) VALUES ('$max_number', '$page_number', '$content[$key]','$page_img_output_name')";
-    $db->query($sql3);
-    //echo $content[$key];
+  if($_POST['edit_tag']==0)
+  {
+    $sql2 = "INSERT INTO Book (book_id, main_title, sub_title, edit_teacher, pages, question, create_date) VALUES ('$max_number', '$main_title', '$sub_title', '$edit_teacher', '$page', '$Q_ddl', '$date1')";
+    $db->query($sql2);
+  }
+  // IF EDIT MODE , UPDATE BOOK DataTable
+  else if($_POST['edit_tag']==1)
+  {
+    $max_number = $_POST['edit_book_id'];
+    $sql2 = "UPDATE Book SET main_title='$main_title', sub_title='$sub_title', edit_teacher='$edit_teacher' WHERE book_id='$max_number'";
+    $db->query($sql2);
   }
 
+
+
+  //INSERT PAGE DatTable
+  if($_POST['edit_tag']==0)
+  {
+    foreach ($content as $key => $value) {
+      //IMG FILE UPLOAD_ERR_OK
+      $page_index = $key;
+      $page_index++;
+      $page_img_name = 'P'.$page_index.'_file';
+      $page_img_output_name = "";
+
+      if ($_FILES[$page_img_name]['error'] === UPLOAD_ERR_OK){
+      $file = $_FILES[$page_img_name]['tmp_name'];
+      $ext[$page_index] = end(explode('.', $_FILES[$page_img_name]['name']));
+      $dest = 'upload/B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
+      $page_img_output_name = 'B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
+      move_uploaded_file($file, $dest);
+      }
+      else {
+      }
+      $page_number = $key;
+      $page_number ++;
+      $sql3 = "INSERT INTO Page (book_id, page_no, content,picture_ext) VALUES ('$max_number', '$page_number', '$content[$key]','$page_img_output_name')";
+      $db->query($sql3);
+      //echo $content[$key];
+    }
+  }
+
+  // IF EDIT MODE, UPDATE PAGE DatTable
+  else if($_POST['edit_tag']==1)
+  {
+    foreach ($content as $key => $value) {
+      //IMG FILE UPLOAD_ERR_OK
+      $page_number = $key;
+      $page_number ++;
+
+      $page_index = $key;
+      $page_index++;
+
+      $page_img_name = 'P'.$page_index.'_file';
+      $page_img_output_name = "";
+
+      if ($_FILES[$page_img_name]['error'] === UPLOAD_ERR_OK)
+      {
+        //MAKE SURE THERE IS A IMG IN DB OR NOT
+        $sql_check = "SELECT picture_ext FROM Page WHERE book_id = '$max_number' AND page_no = '$page_number'";
+        $result = mysqli_fetch_object($db->query($sql_check));
+        $pic_ext = $result->picture_ext;
+        //IF THERE IS A IMAGE EXIST
+        if(strlen($pic_ext)>1)
+        {
+          //DELETE OLD FILE.
+          unlink('upload/'.$pic_ext);
+        }
+
+        //UPLOAD NEW FILE
+        $file = $_FILES[$page_img_name]['tmp_name'];
+        $ext[$page_index] = end(explode('.', $_FILES[$page_img_name]['name']));
+        $dest = 'upload/B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
+        $page_img_output_name = 'B'.$max_number.'P'.$page_index.'.'.$ext[$page_index];
+        move_uploaded_file($file, $dest);
+
+        //UPDATE PIC_EXT
+        $sql3 = "UPDATE Page SET picture_ext = '$page_img_output_name' WHERE book_id = '$max_number' AND page_no = '$page_number'";
+        $db->query($sql3);
+
+      }
+      else {
+      }
+
+
+      $sql3 = "UPDATE Page SET content = '$content[$key]' WHERE book_id = '$max_number' AND page_no = '$page_number'";
+      $db->query($sql3);
+    }
+  }
+
+
+
+  /*
   //INSERT TeachMaterial DataTable
   if(isset($_POST['material_name']))
   {
@@ -135,5 +201,5 @@ $content = $_POST['content'];
 
   echo "<script>alert('編書成功'); location.href = 'BookList.php';</script>";
 
-
+*/
 ?>

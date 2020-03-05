@@ -13,7 +13,14 @@
 			$old_question_no = $result->old_question_no;
 		}
 		
-	}	
+	}
+
+	if($now_question_no != $old_question_no){
+		if(isset($_SESSION["if_answer"])){
+			unset($_SESSION["if_answer"]);
+		}
+	}
+
 
 	$data["old_question_no"] = $old_question_no;
 	$data["old_book_id"] = $old_book_id;

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <?php 
 	session_start(); 
-	$WhosAnswer = $_SESSION['username'];
+	$WhosAnswer = "A1234";
+	//$WhosAnswer = $_SESSION['username'];
 	if($_SESSION['username'] == null){
 		echo '12345';
 	}
@@ -11,22 +12,20 @@
 ?>
 <?php
 	include("connects.php");
-	$sql = "SELECT * FROM Now_state";
-	$temp = "SELECT * FROM temp_for_state";
-	$now = 0;
-	$last = 0;
-	if($stmt = $db->query($sql)){
-		while($result = mysqli_fetch_object($stmt)){
-			$now = $result->No;
-			$UUID_now = $result->UUID;
-			$stmt = $db->query($temp);
-			$result = mysqli_fetch_object($stmt);
-			$last = $result->No_temp;
-			$UUID_last = $result->UUID;
+        $sql = "SELECT * FROM `Now_stats`";
+        $now_book_id = 0;
+        $now_question_no = 0;
+        $old_book_id = 0;
+        $old_question_no = 0;
+        if($stmt = $db->query($sql)){
+                $result = mysqli_fetch_object($stmt);
+        	$now_book_id = $result->book_id;
+                $now_question_no = $result->question_no;
 
-		}
-	}	
+                $old_book_id = $result->old_book_id;
+                $old_question_no = $result->old_question_no;
 
+	} 
 
 ?>
 <html lang="en" style="height:100%">
@@ -158,54 +157,51 @@
 			include("connects.php");
 			
 			$date=date('Y-m-d H:i:s');
-			$sql_get_UUID_NoExam = "select * from Now_state";	
+			$sql_get_UUID_NoExam = "select * from Now_stats";	
 
 			if($stmt = $db->query($sql_get_UUID_NoExam)){
-				while($result = mysqli_fetch_object($stmt)){			
-					$ExamNo = $result->ExamNumber;
+				while($result = mysqli_fetch_object($stmt)){							
 					$UUID = $result->UUID;	
+					$question_no = $result->question_no;
 				}
 			}
 
 			//$WhoAnswer = $_POST['username'];	
-			//$WhosAnswer = "A1234";
-			$WhosAnswer = $_SESSION['username'];
-			echo $WhosAnswer;
+			$WhosAnswer = "A1234";
+			//$WhosAnswer = $_SESSION['username'];
+			//echo $WhosAnswer;
 
-			$Answer_count_sql = "Select count(Answer) AS Answer_count from ExamResult Where ExamNo ='".$ExamNo."' and UUID ='".$UUID."' and WhosAnswer='".$WhosAnswer."'";
+			$Answer_count_sql = "Select count(Answer) AS Answer_count from PracticeResult Where UUID ='".$UUID."' and WhosAnswer='".$WhosAnswer."'";
 			$stmt1 = $db->query($Answer_count_sql);
 			$result = mysqli_fetch_object($stmt1);
 			$Answer_number = $result->Answer_count;
 			
 			if($Answer_number ==0 ){				
 				//抓取最大之No+1
-				$No_sql = "select MAX(No) AS MAXNO from ExamResult";
+				$No_sql = "select MAX(No) AS MAXNO from PracticeResult";
 				$result = mysqli_fetch_object($db->query($No_sql));
 				$No = $result->MAXNO;
 				$No = $No+1;
 				
 				
 				//抓取有幾題題目	
-				$sql_catch = "select question_list from ExamList where No ='".$ExamNo."'";
-				$result = mysqli_fetch_object($db->query($sql_catch));
-				$examstr = $result->question_list;
-				$qlist = array();
-				$qlist = mb_split(",",$examstr);
+				//$sql_catch = "select count(question_no) AS question_count from Question where question_no ='".$question_no."'";
+				//$result = mysqli_fetch_object($db->query($sql_catch));
+				//$examnum = $result->question_count;
 				//echo count($qlist);
-				$exam_num = count($qlist);
 				$Answer = '';
 				$Answertime = '';
-				for( $i = 0 ; $i < $exam_num ; $i++){
-					if($i != 0){
-						$Answer = $Answer.'-N';
-						$Answertime = $Answertime.'-N';
-					}
-					else{
-						$Answer = $Answer.'N';
-						$Answertime = $Answertime.'N';
-					}
-				}
-				$inser_sql = "insert into ExamResult (No,ExamNo,UUID,Answer,WhosAnswer,ExamTime,AnswerTime) Values ('".$No."','".$ExamNo."','".$UUID."','".$Answer."','".$WhosAnswer."','".$date."','".$Answertime."')";
+				//for( $i = 0 ; $i < $exam_num ; $i++){
+				//	if($i != 0){
+				//		$Answer = $Answer.'-N';
+				//		$Answertime = $Answertime.'-N';
+				//	}
+				//	else{
+				//		$Answer = $Answer.'N';
+				//		$Answertime = $Answertime.'N';
+				//	}
+				//}
+				$inser_sql = "insert into PracticeResult (No,UUID,Answer,WhosAnswer,ExamTime,AnswerTime) Values ('".$No."','".$UUID."','".$Answer."','".$WhosAnswer."','".$date."','".$Answertime."')";
 				//$test_answer = $db->query($inser_sql);
 				//echo $test_answer;
 				$db->query($inser_sql);
@@ -214,57 +210,60 @@
 
 				
 		?>
-		
 
+		 <script>
+	                 var last_book_id = <?php echo "$old_book_id";?>;
+                         var last_question_no = <?php echo "$old_question_no";?>;
 
-		<script>
-			var get_last = <?php echo "$last";?>;
-			var get_now =  <?php echo "$now";?>;
-			var get_last_UUID = '<?php echo $UUID_last;?>';
-			var get_now_UUID = '<?php echo $UUID_now;?>';
-			
+                         var now_book_id =  <?php echo "$now_book_id";?>;
+                         var now_question_no =  <?php echo "$now_question_no";?>;
 
-			function set_status(){
-				if(get_now_UUID.trim()!=get_last_UUID.trim()){
-			//		alert(get_last_UUID.length);
-			//		alert(get_now_UUID.length);
-					$.ajax(
-					{
-						type:"POST",
-						url:"client_wait_reset.php"
-					}
-					).done(function(msg){});
-					window.location.reload();
-				}
-				if(get_last != 0){
-					//跳至下一題
-					$.ajax(
-					{
-						type:"POST",
-						url:"mobile_reset.php"															
-					}
-					).done(function(msg){});
-					document.location.href="client_show.php";														
-				}
-				$.ajax(
-				{
-					type:"POST",
-					url:"client_wait_reset.php",
-					success:function(data){
-						get_last_UUID = data;
-					}
-				});
-				$.ajax(
-				{	
-					type:"POST",
-					url:"mobile_reset.php",
-					success:function(data){
-						get_last = data;
-					}
-				});
-			}
-			setInterval(set_status,1000);
-		</script>	
+                         function set_question(){
+ 	                        if(last_book_id != now_book_id){
+        	                        //跳至下一題
+                	                $.ajax(
+                        	        {
+	                        	        type:"POST",
+                                       	 url:"mobile_reset.php"                                                               
+	                                }
+                   	                ).done(function(msg){});
+                                        window.location.reload();
+                                }
+				
+                                if(last_question_no != now_question_no){
+		                        $.ajax(
+                                        {
+                	                        type:"POST",
+                                                url:"mobile_reset.php"
+                                        }
+                                        ).done(function(msg){});
+                                        window.location.reload();
+                                }
+				
+				if(last_question_no != 0){
+                                        //跳至下一題
+                                        $.ajax(
+                                        {
+                                                type:"POST",
+                                                url:"mobile_reset.php"                                                                                                       
+                                        }
+                                        ).done(function(msg){});
+                                        document.location.href="client_show.php";                                                                                            
+                                }
+
+                                $.ajax(
+                        	{
+                                	type:"POST",
+                                        url:"mobile_reset.php",
+                                        dataType:"JSON",
+                                        success:function(data){
+                                        	last_question_no = data.old_question_no;
+                                                last_book_id = data.old_book_id;
+                                        }
+                                });
+                        }
+                        setInterval(set_question,300);
+		</script>		
 </div>
 
 		<!-- jQuery -->

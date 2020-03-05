@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <?php
-$main_title = $_POST['main_title'];
-$sub_title = $_POST['sub_title'];
-$edit_teacher = $_POST['edit_teacher'];
-$page = $_POST['page'];
-//echo $main_title.'-'.$sub_title.'-'.$edit_teacher.'-'.$page;
+
+//IF IS THE CREATE MODE
+if(!isset($_GET['action']))
+{
+  $main_title = $_POST['main_title'];
+  $sub_title = $_POST['sub_title'];
+  $edit_teacher = $_POST['edit_teacher'];
+  $page = $_POST['page'];
+}
+
+
+
+//IF IS THE EDIT MODE
+if(isset($_GET['action']))
+{
+  $book_id = $_GET['book_id'];
+
+  //GET THE BOOK DATA
+  include("connects.php");
+  $sql = "SELECT * FROM Book WHERE book_id = $book_id";
+  $result = mysqli_fetch_object($db->query($sql));
+  $main_title = $result->main_title;
+  $sub_title = $result->sub_title;
+  $edit_teacher = $result->edit_teacher;
+  $page = $result->pages;
+}
 ?>
 <html lang="en">
           <head>
@@ -121,24 +142,33 @@ $page = $_POST['page'];
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                      <input type="hidden" name="edit_tag" id="edit_tag" value="0"/>
+                      <input type="hidden" name="edit_book_id" id="edit_book_id" value="-1"/>
+                      <?php
+                        if(isset($_GET['action']))
+                        {
+                          echo "<script>document.getElementById('edit_tag').value=1;</script>";
+                          echo "<script>document.getElementById('edit_book_id').value=".$_GET['book_id'].";</script>";
+                        }
+                      ?>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">主標題 :</label>
                         <div class="col-md-8 col-sm-8 col-xs-10">
-                          <input type="text" class="form-control" name="main_title" value="<?php echo $main_title;?>" required="required" readonly>
+                          <input type="text" class="form-control" name="main_title" value="<?php echo $main_title;?>" required="required" >
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">副標題 :</label>
                         <div class="col-md-8 col-sm-8 col-xs-10">
-                          <input type="text" class="form-control" name="sub_title" value="<?php echo $sub_title;?>" required="required" readonly>
+                          <input type="text" class="form-control" name="sub_title" value="<?php echo $sub_title;?>" required="required" >
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">編書老師 :</label>
                         <div class="col-md-8 col-sm-8 col-xs-10">
-                          <input type="text" class="form-control" name="edit_teacher" value="<?php echo $edit_teacher;?>" required="required" readonly>
+                          <input type="text" class="form-control" name="edit_teacher" value="<?php echo $edit_teacher;?>" required="required" >
                         </div>
                       </div>
 
@@ -158,12 +188,34 @@ $page = $_POST['page'];
                         echo '<div class="form-group">';
                           echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">第'.$i.'頁</label>';
                           echo '<div class="col-md-8 col-sm-8 col-xs-12">';
-                            echo '<textarea id="test" name="content[]" class="form-control" rows="5" wrap="soft" maxlength="200" required></textarea>';
+                            echo '<textarea id="test" name="content[]" class="form-control" rows="5" wrap="soft" maxlength="200" required>';
+                            if(isset($_GET['action']))
+                            {
+                              //IF IS EDIT MODE, GET THE DEFAULT CONTENT.
+                              $sql = "SELECT * FROM Page WHERE book_id = $book_id AND page_no = $i";
+                              $result = mysqli_fetch_object($db->query($sql));
+                              echo $result->content;
+                            }
+                            echo '</textarea>';
                           echo '</div>';
                         echo '</div>';
                         echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳背景圖 :</label>';
                         echo '<input type="file" name="P'.$i.'_file"><br />';
+                        if(isset($_GET['action']))
+                        {
+                          echo '<label class="control-label col-md-3 col-sm-3 col-xs-12">原背景圖 :</label>';
+                          $old_pic_ext = $result->picture_ext;
+                          if(strlen($old_pic_ext)>1)
+                          {
+                            echo '<img src="upload/'.$old_pic_ext.'" style="width:100px; height:100px;" ';
+                          }
+                          else
+                          {
+                            echo '無';
+                          }
+                        }
                         echo '<hr />';
+                        echo '<hr style="border-top: 2px dashed #2D99C8;" />';
                         //echo '<div class="ln_solid"></div>';
                       }
                       ?>
@@ -221,7 +273,7 @@ $page = $_POST['page'];
 
                                   var lb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">教材'+material_create_input_number+'名稱 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<input type="text" placeholder="教材名稱請與課文詞彙相同" class="form-control" name="material_name[]">'+
+                                              '<input type="text" placeholder="教材名稱請與課文詞彙相同" class="form-control" id="tm_title'+material_create_input_number+'" name="material_name[]">'+
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳教材'+material_create_input_number+'圖檔 :</label>'+
                                            '<input type="file" name="A'+material_create_input_number+'_file"><br />'+
@@ -229,7 +281,7 @@ $page = $_POST['page'];
                                            '<input type="file" name="A'+material_create_input_number+'video_file"><br />'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">教材'+material_create_input_number+'說明 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<textarea name="material_content[]" class="form-control" rows="5" wrap="soft" maxlength="150"></textarea>'+
+                                              '<textarea name="material_content[]" id="tm_content'+material_create_input_number+'" class="form-control" rows="5" wrap="soft" maxlength="150"></textarea>'+
                                            '</div>';
                                   div_form.innerHTML = lb;
                                   document.getElementById("material").appendChild(div_form);
@@ -245,8 +297,44 @@ $page = $_POST['page'];
                                       document.getElementById("material_number").value=material_create_input_number;
                                       }
                                   }
+                        function setTeachMaterialDefault(tm_index,title,content)
+                        {
+                          var TM_id = "tm_title"+tm_index;
+                          document.getElementById(TM_id).value = title;
 
+                          var TM_content = "tm_content"+tm_index;
+                          if(content.length>0)
+                          {
+                            document.getElementById(TM_content).value = content;
+                          }
+                          else
+                          {
+                            document.getElementById(TM_content).value = "";
+                          }
+
+
+                        }
                         </script>
+                        <?php
+                        if(isset($_GET['action']))
+                        {
+                          $sql = "SELECT COUNT(title) AS old_tm_number FROM TeachMaterial WHERE book_id='$book_id'";
+                          $result = mysqli_fetch_object($db->query($sql));
+                          $old_tm_number = $result->old_tm_number;
+
+                          //CREATE DEFAULT TeachMaterial
+                          for($i = 1 ; $i <= $old_tm_number ; $i++)
+                          {
+                            echo '<script>addInputPic();</script>';
+
+                            $sql = "SELECT * FROM TeachMaterial WHERE book_id='$book_id' AND material_no='$i'";
+                            $result = mysqli_fetch_object($db->query($sql));
+                            $old_tm_title = $result->title;
+                            $old_tm_content = $result->content;
+                            echo '<script>setTeachMaterialDefault("'.$i.'","'.$old_tm_title.'","'.$old_tm_content.'")</script>';
+                          }
+                        }
+                        ?>
 
                       </div>
                   </div>

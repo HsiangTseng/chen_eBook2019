@@ -117,6 +117,7 @@
                         <th>編輯老師</th>
                         <th>出題時間</th>
                         <th>閱讀</th>
+                        <th>編輯</th>
                       </tr>
                     </thead>
                     <?php
@@ -167,6 +168,7 @@
                         echo '<td>'.$edit_teacher[0].'</td>';
                         echo '<td>'.$create_date[0].'</td>';
                         echo '<td><button type="submit" class="btn btn-success" onclick="btnclk('.$book_id[0].')">閱讀</button></td>';
+                        echo '<td><button type="submit" class="btn btn-info" onclick="btn_go_edit('.$book_id[0].')">編輯</button></td>';
                         ?>
                       </tr>
                     </tbody>
@@ -242,7 +244,8 @@
                     { "width": "25%" },
                     { "width": "25%" },
                     { "width": "15%" },
-                    { "width": "20%" },
+                    { "width": "15%" },
+                    { "width": "5%" },
                     { "width": "5%" },
                   ],
                   "columnDefs": [
@@ -255,6 +258,12 @@
                 {
                   var index = b_index;
                   window.location.href = 'ReadBook.php?book_id='+index+'&page=1';
+                }
+
+                function btn_go_edit(b_index)
+                {
+                  var index = b_index;
+                  window.location.href = 'BookDetail.php?action=edit&book_id='+index;
                 }
 
                 $(document).ready
@@ -278,6 +287,7 @@
                             editteacherFromPHP[i],
                             createtimeFromPHP[i],
                             "<button type=\"submit\" class=\"btn btn-success\" onclick=\"btnclk("+bookidFromPHP[i]+")\">閱讀</button>",
+                            "<button type=\"submit\" class=\"btn btn-info\" onclick=\"btn_go_edit("+bookidFromPHP[i]+")\">編輯</button>",
                             ]).draw(false);
                           }
                         }
