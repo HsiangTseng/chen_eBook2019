@@ -11,8 +11,8 @@
 		}
 	}
 
-	$WhosAnswer = "A1234";
-	//$WhosAnswer = $_SESSION['username'];
+	//$WhosAnswer = "A1234";
+	$WhosAnswer = $_SESSION['username'];
 
 
 	$Answer_sql = "Select CA from Question Where question_no ='".$question_no."'";

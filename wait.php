@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <?php 
 	session_start(); 
-	$WhosAnswer = "A1234";
-	//$WhosAnswer = $_SESSION['username'];
+	//$WhosAnswer = "A1234";
+	$WhosAnswer = $_SESSION['username'];
 	if($_SESSION['username'] == null){
 		echo '12345';
 	}
@@ -167,8 +167,8 @@
 			}
 
 			//$WhoAnswer = $_POST['username'];	
-			$WhosAnswer = "A1234";
-			//$WhosAnswer = $_SESSION['username'];
+			//$WhosAnswer = "A1234";
+			$WhosAnswer = $_SESSION['username'];
 			//echo $WhosAnswer;
 
 			$Answer_count_sql = "Select count(Answer) AS Answer_count from PracticeResult Where UUID ='".$UUID."' and WhosAnswer='".$WhosAnswer."'";

@@ -282,7 +282,10 @@ if(isset($_GET['action']))
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">教材'+material_create_input_number+'說明 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
                                               '<textarea name="material_content[]" id="tm_content'+material_create_input_number+'" class="form-control" rows="5" wrap="soft" maxlength="150"></textarea>'+
-                                           '</div>';
+                                           '</div>'+
+                                           '<label id="lb_old_tm_img'+material_create_input_number+'" style="display:none;" class="control-label col-md-3 col-sm-3 col-xs-12">原圖 :</label>'+
+                                           '<img style="width:100px; height:100px; display:none;" id="tm_img_src'+material_create_input_number+'" src="" />';
+
                                   div_form.innerHTML = lb;
                                   document.getElementById("material").appendChild(div_form);
                                   document.getElementById("material_number").value=material_create_input_number;
@@ -331,7 +334,18 @@ if(isset($_GET['action']))
                             $result = mysqli_fetch_object($db->query($sql));
                             $old_tm_title = $result->title;
                             $old_tm_content = $result->content;
+                            $old_tm_pic_ext = $result->img;
                             echo '<script>setTeachMaterialDefault("'.$i.'","'.$old_tm_title.'","'.$old_tm_content.'")</script>';
+                            //echo $old_tm_pic_ext;
+                            if(strlen($old_tm_pic_ext)>1)
+                            {
+                              echo '<script>
+                                    document.getElementById("tm_img_src'.$i.'").src="'.$old_tm_pic_ext.'";
+                                    document.getElementById("lb_old_tm_img'.$i.'").style.display="block";
+                                    document.getElementById("tm_img_src'.$i.'").style.display="block";
+                                    </script>';
+                            }
+
                           }
                         }
                         ?>
@@ -352,7 +366,7 @@ if(isset($_GET['action']))
               $question_number = array();
               $question_content = array();
               $index = 1;
-              $sql = "SELECT * FROM Question WHERE QA = 'Q' ORDER BY type DESC ,single_or_multi DESC";
+              $sql = "SELECT * FROM Question WHERE QA = 'Q' ";
               if($stmt = $db->query($sql))
               {
                   while($result = mysqli_fetch_object($stmt))
@@ -403,7 +417,7 @@ if(isset($_GET['action']))
                                           '<div class="form-group">'+
                                           '<label class="control-label col-md-3 col-sm-3 col-xs-12">第'+exercise_create_input_number+'題</label>'+
                                             '<div class="col-md-9 col-sm-9 col-xs-12">'+
-                                              '<select class="select2_single form-control" name="Question_ddl[]" tabindex="-1" required>'+
+                                              '<select class="select2_single form-control" id="tm_exe'+exercise_create_input_number+'" name="Question_ddl[]" tabindex="-1" required>'+
                                                 '<?php ddl_content();?>'+
                                               '</select>'+
                                             '</div>'+
@@ -423,7 +437,40 @@ if(isset($_GET['action']))
                                       document.getElementById("exercise_number").value=exercise_create_input_number;
                                       }
                                   }
+
+                        function settingSelected(list_index,selected_index){
+                                    //this function for edit to select the default ddl index
+                                    selected_index--;
+                                    var name = "tm_exe"+list_index;
+                                    document.getElementById(name).selectedIndex = selected_index;
+                                  }
+
                         </script>
+
+
+                        <?php
+                        if(isset($_GET['action']))
+                        {
+                          $sql = "SELECT question FROM Book WHERE book_id='$book_id'";
+                          $result = mysqli_fetch_object($db->query($sql));
+                          $old_exercise = $result->question;
+                          $old_exercise_number = substr_count($old_exercise, "-");
+                          $old_exercise_number++;
+
+                          $old_exercise_array = explode("-",$old_exercise);
+                          //print_r ($old_exercise_array);
+
+                          //CREATE DEFAULT TeachMaterial
+                          for($i = 1 ; $i <= $old_exercise_number ; $i++)
+                          {
+                            $old_exercise_array_index = $i-1;
+                            echo '<script>';
+                            echo 'addInputExe();';
+                            echo 'settingSelected("'.$i.'","'.$old_exercise_array[$old_exercise_array_index].'")';
+                            echo '</script>';
+                          }
+                        }
+                        ?>
 
                       </div>
                   </div>
@@ -460,10 +507,14 @@ if(isset($_GET['action']))
 
                                   var lb = '<label class="control-label col-md-3 col-sm-3 col-xs-12">音檔'+audio_create_input_number+'標題 :</label>'+
                                            '<div class="col-md-8 col-sm-8 col-xs-10">'+
-                                              '<input type="text" class="form-control" placeholder="教材名稱請與課文詞彙相同"  required="required" name="audio_title[]">'+
+                                              '<input id="tm_audio_title'+audio_create_input_number+'" type="text" class="form-control" placeholder="教材名稱請與課文詞彙相同"  required="required" name="audio_title[]">'+
                                            '</div>'+
                                            '<label class="control-label col-md-3 col-sm-3 col-xs-12">上傳音檔'+audio_create_input_number+' :</label>'+
-                                           '<input type="file" name="Audio'+audio_create_input_number+'_file" required /><br />';
+                                           '<input type="file" name="Audio'+audio_create_input_number+'_file"  /><br />'+
+                                           '<label id="lb_old_audio'+audio_create_input_number+'" style="display:none;" class="control-label col-md-3 col-sm-3 col-xs-12">原音檔 :</label>'+
+                                           '<audio style="display:none;" id="audio_id'+audio_create_input_number+'" controls>'+
+                                             '<source id="audio_src'+audio_create_input_number+'" src="" type="audio/mpeg" />'+
+                                           '</audio>';
 
 
                                   adiv_form.innerHTML = lb;
@@ -482,6 +533,42 @@ if(isset($_GET['action']))
                                   }
 
                         </script>
+                        <?php
+                        if(isset($_GET['action']))
+                        {
+                          $audio_no = array();
+                          $audio_title = array();
+                          $audio_ext = array();
+                          $index = 1;
+                          $sql = "SELECT * FROM Audio WHERE book_id='$book_id'";
+                          if($stmt = $db->query($sql))
+                          {
+                              while($result = mysqli_fetch_object($stmt))
+                              {
+                                  $audio_no[$index] = $result->audio_no;
+                                  $audio_title[$index] = $result->title;
+                                  $audio_ext[$index] = $result->audio_ext;
+                                  $index++;
+                              }
+                          }
+                          $audio_count = $index - 1;
+
+                          for($i = 1 ; $i <= $audio_count ; $i++)
+                          {
+                            echo '<script>';
+                            echo 'addInputAudio();';
+                            echo 'document.getElementById("tm_audio_title'.$i.'").value="'.$audio_title[$i].'";';
+                            echo 'document.getElementById("lb_old_audio'.$i.'").style.display="block";';
+                            echo 'document.getElementById("audio_id'.$i.'").style.display="block";';
+                            echo 'document.getElementById("audio_src'.$i.'").src="upload/'.$audio_ext[$i].'";';
+                            echo '</script>';
+
+
+                          }
+
+
+                        }
+                        ?>
 
                       </div>
                   </div>
