@@ -254,8 +254,8 @@ if(isset($_GET['action']))
                       <div class="form-horizontal form-label-left">
                         <div class="form-group">
                           <label class="control-label col-md-3" for="first-name">增減教材數量 : </label>
-                          <button type="button" class="btn btn-success" onclick="addInputPic()">+</button>
-                          <button type="button" class="btn btn-danger" onclick="subInputPic()">-</button>
+                          <button type="button" id="btn_tm_add" class="btn btn-success" onclick="addInputPic()">+</button>
+                          <button type="button" id="btn_tm_sub" class="btn btn-danger" onclick="subInputPic()">-</button>
                         </div>
 
                         <div id="material"></div>
@@ -398,8 +398,8 @@ if(isset($_GET['action']))
                       <div class="form-horizontal form-label-left">
                         <div class="form-group">
                           <label class="control-label col-md-3" for="first-name">增減習題數量 : </label>
-                          <button type="button" class="btn btn-success" onclick="addInputExe()">+</button>
-                          <button type="button" class="btn btn-danger" onclick="subInputExe()">-</button>
+                          <button type="button"  class="btn btn-success" onclick="addInputExe()">+</button>
+                          <button type="button"  class="btn btn-danger" onclick="subInputExe()">-</button>
                         </div>
 
                         <div id="exercise"></div>
@@ -488,8 +488,8 @@ if(isset($_GET['action']))
                       <div class="form-horizontal form-label-left">
                         <div class="form-group">
                           <label class="control-label col-md-3" for="first-name">增減音檔 : </label>
-                          <button type="button" class="btn btn-success" onclick="addInputAudio()">+</button>
-                          <button type="button" class="btn btn-danger" onclick="subInputAudio()">-</button>
+                          <button type="button" id="btn_audio_add" class="btn btn-success" onclick="addInputAudio()">+</button>
+                          <button type="button" id="btn_audio_sub" class="btn btn-danger" onclick="subInputAudio()">-</button>
                         </div>
 
                         <div id="audio"></div>
@@ -567,6 +567,17 @@ if(isset($_GET['action']))
                           }
 
 
+                        }
+                        ?>
+
+                        <?php
+                        //HIDE ALL BTN
+                        if(isset($_GET['action']))
+                        {
+                          echo '<script>document.getElementById("btn_tm_add").style.display="none";</script>';
+                          echo '<script>document.getElementById("btn_tm_sub").style.display="none";</script>';
+                          echo '<script>document.getElementById("btn_audio_add").style.display="none";</script>';
+                          echo '<script>document.getElementById("btn_audio_sub").style.display="none";</script>';
                         }
                         ?>
 
