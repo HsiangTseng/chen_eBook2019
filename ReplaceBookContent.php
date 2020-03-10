@@ -45,7 +45,7 @@
       foreach ($material_title as $key => $value) {
         //REPLACE THE WORD TO MATERIAL'URL
         $old_word = $material_title[$key];
-        $url_word = '<a href="javascript: void(0)" onclick="Show_media('.$key.')">'.$old_word.'</a>';
+        $url_word = '<a href="javascript: void(0)" style="color:red;" onclick="Show_media('.$key.')">'.$old_word.'</a>';
         $output_content = str_replace($old_word,$url_word,$output_content);
       }
     }
@@ -57,7 +57,7 @@
       foreach ($audio_title as $key => $value) {
         //REPLACE THE WORD TO MATERIAL'URL
         $old_word = $audio_title[$key];
-        $url_word = '<a href="javascript: void(0)" onclick="Show_Audio('.$key.')">'.$old_word.'</a>';
+        $url_word = '<a href="javascript: void(0)" style="color:red;" onclick="Show_Audio('.$key.')">'.$old_word.'</a>';
         $output_content = str_replace($old_word,$url_word,$output_content);
       }
     }
