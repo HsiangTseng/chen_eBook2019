@@ -455,7 +455,11 @@ if(isset($_GET['action']))
                           $result = mysqli_fetch_object($db->query($sql));
                           $old_exercise = $result->question;
                           $old_exercise_number = substr_count($old_exercise, "-");
-                          $old_exercise_number++;
+                          if($old_exercise_number>0)
+                          {
+                            $old_exercise_number++;
+                          }
+
 
                           $old_exercise_array = explode("-",$old_exercise);
                           //print_r ($old_exercise_array);
