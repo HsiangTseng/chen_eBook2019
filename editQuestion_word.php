@@ -213,9 +213,15 @@
                     </div>
                 </div>
                 <div class="form-group  sameline">
+                    <label class="control-label col-md-3" for="last-name">題目附影片 : <span></span></label>
+                    <input type="file" name="Q1_video_file" id="Q1_video_file"/>
+                </div>
+                <div class="form-group  sameline">
                     <label class="control-label col-md-3" for="last-name">題目附圖 : <span></span></label>
                     <input type="file" name="Q1_file" id="Q1_file"/>
                 </div>
+
+
                 <div class="thumbnail" style="border-style: outset; width:200px; height:200px; margin:0px auto;">
                       <img id="img0" src="" alt="">
                 </div>

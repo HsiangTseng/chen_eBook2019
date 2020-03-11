@@ -78,6 +78,34 @@
     $db->query($sql);
   }
 
+  if ($_FILES['Q1_video_file']['error'] === UPLOAD_ERR_OK){
+
+    //CHECK IF HAVE OLD IMG
+    $sql = "SELECT video FROM Question WHERE question_no = '$question_number' AND QA='Q'";
+    $result = mysqli_fetch_object($db->query($sql));
+    $q1_old_video = $result->video;
+    // IF HAVE OLD IMG, DELETE
+    if(strlen($q1_old_video)>0)
+    {
+      $q1_old_video_name = 'upload/'.$q1_old_video;
+      unlink($q1_old_video_name);
+    }
+
+    $file_video = $_FILES['Q1_video_file']['tmp_name'];
+    $q1_video = end(explode('.', $_FILES['Q1_video_file']['name']));
+    $dest_video = 'upload/Q'.(string)$question_number.'Q1.'.$q1_video;
+    move_uploaded_file($file_video, $dest_video);
+
+    $q1_video_output = 'Q'.(string)$question_number.'Q1.'.$q1_video;
+
+
+    //UPDATE EXT
+    $sql = "UPDATE Question SET video='$q1_video_output' WHERE question_no='$question_number' AND QA='Q' ";
+    $db->query($sql);
+  }
+
+
+
 
   //A1 PICTURE
   if ($_FILES['A1_file']['error'] === UPLOAD_ERR_OK){
