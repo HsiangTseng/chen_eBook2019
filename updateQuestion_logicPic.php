@@ -112,11 +112,11 @@
         $sql2 = "INSERT INTO Keyboard (KeyboardNo,type, ext) VALUES ('$KeyboardNumber', 'Logic', '$ext_string')";
         $db->query($sql2);
 
-				$sqlQuestion = "INSERT INTO Question (question_no, QA, type, single_or_multi, CA, title, Content,KeyboardNo, classification) VALUES ('$max_number', 'Q', 'LPICTUIRE', 'MULTI', '$CA', '$title', '$Q1', $KeyboardNumber, '$classification[0]')";
+				$sqlQuestion = "INSERT INTO Question (question_no, QA, type, single_or_multi, CA, title, Content,KeyboardNo, classification) VALUES ('$max_number', 'Q', 'LPICTURE', 'MULTI', '$CA', '$title', '$Q1', $KeyboardNumber, '$classification[0]')";
         $db->query($sqlQuestion);
         $db->close();
 
-        //echo "<script>alert('出題成功'); location.href = 'MakeQuestion.php';</script>";
+        echo "<script>alert('出題成功'); location.href = 'MakeQuestion.php';</script>";
     }
 
 
