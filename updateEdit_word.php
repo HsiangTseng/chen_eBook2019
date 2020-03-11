@@ -13,13 +13,13 @@
   $CA = implode (",", $CA);
 	$classification = $_POST['classification'];
   $single_or_multi = $_POST['single_or_multi'];
-
+/*
 	echo $title;
 
   echo $question_number.'<br />'.$q1.'<br />'.$a1.'<br />'.$a2.'<br />'.$a3.'<br />'.$a4.'<br />';
   print_r($CA);
   print_r($classification);
-  echo $single_or_multi;
+  echo $single_or_multi;*/
 
 
   //UPDATE Q1 DB
@@ -321,8 +321,8 @@
        $sql = "UPDATE Question SET audio='$audio_dest' WHERE question_no='$question_number' AND QA='A4' ";
        $db->query($sql);
    	 }
-/*
+
 		 echo "<script>alert('編輯完成'); location.href = 'QuestionList.php';</script>";
-*/
+
 
 ?>
