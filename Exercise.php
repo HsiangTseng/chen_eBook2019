@@ -97,16 +97,36 @@
                             {
                               echo '<p style="font-size:60px;"><b>題目:<br /> '.$result->Content.'</b></p>';
                               $picture_ext = $result->picture_ext;
+			      $audio = $result->audio;
+			      $video = $result->video; 
                               if(!(empty($picture_ext)||is_null($picture_ext)))//if have picture in the question
                               {
                                 if(strpos($picture_ext,'upload') === false)
                                 {
-                                  echo '<div class="col-lg-4 col-md-4">';
+                                  echo '<div class="col-lg-6 col-md-6">';
                                   echo '<p></p>';
                                   echo '<img src="upload/'.$picture_ext.'" ';
                                   echo 'class="responsive" style="max-height:100%;max-width:100%;border:5px; border-color:#A0A0A0; border-style: double;">';
                                   echo '</div>';
                                 }
+                              }
+			      if(!(empty($video)||is_null($video)))//if have picture in the question
+                              {
+                                  echo '<div class="col-lg-6 col-md-6">';
+                                  echo '<p></p>';
+				  echo '<video controls  style="max-height:100%;max-width:100%;">';
+                                  echo '<source src="upload/'.$video.'" type="video/mp4">';
+		                  echo '</video>';
+                                  echo '</div>';
+                              }
+			      if(!(empty($audio)||is_null($audio)))//if have picture in the question
+                              {
+                                  echo '<div class="col-lg-8 col-md-8">';
+                                  echo '<p></p>';
+                                  echo '<audio controls>';
+                                  echo '<source src="'.$audio.'">';
+                                  echo '</audio>';
+                                  echo '</div>';
                               }
                             }
                         }

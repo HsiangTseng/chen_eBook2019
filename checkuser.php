@@ -23,7 +23,7 @@ if($pid != null && $pw != null && $result->id == $pid && $result->password == $p
 
         if($type == 'T')
         {
-        	header ('location: LandingPage.php');
+        	header ('location: MakeBook.php');
         }
         if($type == 'S')
         {

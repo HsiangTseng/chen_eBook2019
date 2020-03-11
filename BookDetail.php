@@ -454,11 +454,13 @@ if(isset($_GET['action']))
                           $sql = "SELECT question FROM Book WHERE book_id='$book_id'";
                           $result = mysqli_fetch_object($db->query($sql));
                           $old_exercise = $result->question;
-                          $old_exercise_number = substr_count($old_exercise, "-");
-                          if($old_exercise_number>0)
-                          {
+			  if(!empty($old_exercise) || !is_null($old_exercise)){
+                          $old_exercise_number = substr_count($old_exercise, "-");                                                   
                             $old_exercise_number++;
-                          }
+                         }
+			    
+			  
+		   	  
 
 
                           $old_exercise_array = explode("-",$old_exercise);

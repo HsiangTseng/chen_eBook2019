@@ -57,6 +57,19 @@
     $q1_dest = "";
 	}
 
+  if ($_FILES['Q1_video_file']['error'] === UPLOAD_ERR_OK){
+    $qi_video_dest = "";
+    $file = $_FILES['Q1_video_file']['tmp_name'];
+    $q1_video_ext = end(explode('.', $_FILES['Q1_video_file']['name']));
+    $dest_video = 'upload/Q'.(string)$max_number.'Q1.'.$q1_video_ext;
+    move_uploaded_file($file, $dest_video);
+    $q1_video_dest = 'Q'.(string)$max_number.'Q1.'.$q1_video_ext;
+  }
+        else {
+    $q1_video_dest = "";
+        }
+
+
   if ($_FILES['a1_file']['error'] === UPLOAD_ERR_OK){
     $a1_dest = "";
   	$file = $_FILES['a1_file']['tmp_name'];
@@ -244,7 +257,7 @@
 
 	else // if not edit , means insert.
 	{
-		$sql2 = "INSERT INTO Question (question_no, QA, type, single_or_multi, CA, title, Content, picture_ext, audio, classification) VALUES ('$max_number', 'Q', 'WORD', '$single_or_multi', '$CA', '$title', '$q1', '$q1_dest', '$audio_dest', '$classification[0]')";
+		$sql2 = "INSERT INTO Question (question_no, QA, type, single_or_multi, CA, title, Content, picture_ext, audio, classification, video) VALUES ('$max_number', 'Q', 'WORD', '$single_or_multi', '$CA', '$title', '$q1', '$q1_dest', '$audio_dest', '$classification[0]', '$q1_video_dest')";
 		$db->query($sql2);
 
 		$sql2 = "INSERT INTO Question (question_no, QA, Content, picture_ext, audio, classification) VALUES ('$max_number', 'A1', '$a1', '$a1_dest', '$audio_A1', '0')";

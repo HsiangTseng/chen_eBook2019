@@ -260,6 +260,10 @@
                                 <label class="control-label col-md-3" for="last-name">題目附圖 : <span></span></label>
                                 <input type="file" name="Q1_file" accept="image/*,.wmf"/>
                             </div>
+			    <div class="form-group  sameline">
+                                <label class="control-label col-md-3" for="last-name">題目附影片 : <span></span></label>
+                                <input type="file" name="Q1_video_file" accept="video/*,.m4a"/>
+                            </div>
                             <HR>
                             <HR>
 
