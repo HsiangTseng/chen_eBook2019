@@ -1,66 +1,80 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <?php
-	include("connects.php");
+		include("connects.php");
     include("convert_wmf.php");
-
-
 
     $Q1 = $_POST['Q1'];
     $CA = $_POST['CA'];
-		$title = $_POST['Q1_title'];
+		$Title = $_POST['Q1_title'];
     $number = $_POST['picture_number'];
 		$classification = $_POST['classification'];
 
+		$sql = "SELECT MAX(question_no) AS max FROM Question";
+		$result = mysqli_fetch_object($db->query($sql));
+		$max_number = $result->max;
+		$max_number = $max_number+1;
+		//get the new question's number
 
-    $sql = "SELECT MAX(KeyboardNo) AS max FROM Keyboard";
+		$audio_ext_list="N";
+		if($number>=1)
+		{
+			for($i=1;$i<$number;$i++)
+			{
+				$audio_ext_list = $audio_ext_list.'-N';
+			}
+		}
+		/*echo 'Q-'.$max_number.'<br />';
+		echo 'T-'.$Title.'<br />';
+		echo 'Q-'.$Q1.'<BR />';
+		echo 'CA-'.$CA.'<BR />';
+		echo 'class-'.$classification[0].'<br />';
+		echo $audio_ext_list;*/
+
+		//---------------Question File------------------
+		if ($_FILES['Q1_file']['error'] === UPLOAD_ERR_OK){
+		$file = $_FILES['Q1_file']['tmp_name'];
+		$q1_ext = end(explode('.', $_FILES['Q1_file']['name']));
+		$dest = 'upload/Q'.(string)$max_number.'Q1.'.$q1_ext;
+		move_uploaded_file($file, $dest);
+		$q1_img_output = 'Q'.(string)$max_number.'Q1.'.$q1_ext;
+		}
+		else {
+			$q1_img_output = '';
+		}
+
+		if ($_FILES['audio_file']['error'] === UPLOAD_ERR_OK){
+
+			$file = $_FILES['audio_file']['tmp_name'];
+			//$a1_ext = end(explode('.', $_FILES['audio_file']['name']));
+			$audio_dest = 'upload/Q'.(string)$max_number.'.mp3';
+			 move_uploaded_file($file, $audio_dest);
+			}
+		else {
+			$audio_dest = '';
+		}
+
+		if ($_FILES['video_file']['error'] === UPLOAD_ERR_OK){
+		  $file = $_FILES['video_file']['tmp_name'];
+
+		  $video_ext = end(explode('.', $_FILES['video_file']['name']));
+		  $video_dest = 'upload/Q'.(string)$max_number.'Q1.'.$video_ext;
+		  move_uploaded_file($file, $video_dest);
+			$q1_video_output = 'Q'.(string)$max_number.'Q1.'.$video_ext;
+		  }
+		else {
+			$q1_video_output = "";
+		}
+		//---------------Question File------------------
+
+		//echo $number;
+		$sql = "SELECT MAX(KeyboardNo) AS max FROM Keyboard";
     $result = mysqli_fetch_object($db->query($sql));
     $KeyboardNumber = $result->max;
     $KeyboardNumber = $KeyboardNumber+1;
     //get the new question's number
 
-    $sql = "SELECT MAX(question_no) AS max FROM Question";
-    $result = mysqli_fetch_object($db->query($sql));
-    $max_number = $result->max;
-    $max_number = $max_number+1;
-    //get the new question's number
-
-    $ext = array();
-
-    //edit block
-    if(isset($_POST['edit_tag'])&&isset($_POST['question_number']))
-    {
-        $tag = $_POST['edit_tag'];
-        $question_number = $_POST['question_number'];
-        $KeyboardNumber = $_POST['KeyboardNo'];
-        $max_number = $question_number;
-
-
-        $sql = "SELECT * FROM Keyboard WHERE KeyboardNo = '$KeyboardNumber'";
-        $result = mysqli_fetch_object($db->query($sql));
-        $extString = $result->ext;
-
-        //GET Number of Answer Options.
-        $old_pictureNumber = substr_count($extString,"-")+1;
-        $extArray =  mb_split("-",$extString);
-
-        /*echo 'Q'.$max_number;
-        echo 'K'.$KeyboardNo;
-        echo 'picture_number'.$old_pictureNumber;
-        echo 'ext'.$extString;*/
-
-
-        // if edit , must DELETE OLD FILE first!!!
-        for ($i=1;$i<=$old_pictureNumber;$i++)
-        {
-            $$sql = "SELECT * FROM QuestionList WHERE No = '$question_number' AND QA = 'A1'";
-            $unlinkstring = 'upload/K'.$KeyboardNumber.'A'.$i.'.'.$extArray[$i-1];
-            unlink($unlinkstring);
-        }
-
-    }
-
-
+		$ext = array();
 
     for ($i=1; $i<=$number ; $i++ )
     {
@@ -72,17 +86,17 @@
 		  $dest = 'upload/K'.(string)$KeyboardNumber.$n.'.'.$ext[$i];
 		   move_uploaded_file($file, $dest);
 		  }
-		else {
-		}
+			else {
+			}
 
-    //---------WMF Covert to JPG--------------
-    if($ext[$i]=="wmf")
-    {
-        $name = 'K'.(string)$KeyboardNumber.$n;
-        convert_wmf($name);
-        $ext[$i]="jpg";
-    }
-    //---------WMF Covert to JPG--------------
+      //---------WMF Covert to JPG--------------
+      if($ext[$i]=="wmf")
+      {
+          $name = 'K'.(string)$KeyboardNumber.$n;
+          convert_wmf($name);
+          $ext[$i]="jpg";
+      }
+      //---------WMF Covert to JPG--------------
     }
 
     $ext_string = $ext[1];
@@ -91,34 +105,14 @@
     	$ext_string = $ext_string.'-'.$ext[$i];
     }
 
-    //if edit
-    if(isset($_POST['edit_tag'])&&isset($_POST['question_number']))
-    {
 
-        $sql = "UPDATE Keyboard SET ext='$ext_string' WHERE KeyboardNo = '$KeyboardNumber'";
-        $db->query($sql);
+    $sql2 = "INSERT INTO Keyboard (KeyboardNo, type, ext, audio_ext) VALUES ('$KeyboardNumber', 'Logic', '$ext_string', '$audio_ext_list')";
+    $db->query($sql2);
 
-        $sqlQuestion = "UPDATE QuestionList SET CA = '$CA', Content = '$Q1' WHERE No= '$max_number'";
-        $db->query($sqlQuestion);
+    $sqlQuestion = "INSERT INTO Question (question_no, QA, CA, title, Content, type, single_or_multi, KeyboardNo, classification, picture_ext, audio, video) VALUES ('$max_number', 'Q', '$CA', '$Title', '$Q1', 'LPICTURE', 'MULTI', '$KeyboardNumber', '$classification[0]', '$q1_img_output', '$audio_dest', '$q1_video_output')";
+    $db->query($sqlQuestion);
 
-        $db->close();
-
-        echo "<script>alert('編輯成功'); location.href = 'QuestionList.php';</script>";
-
-    }
-
-    else
-    {
-        $sql2 = "INSERT INTO Keyboard (KeyboardNo,type, ext) VALUES ('$KeyboardNumber', 'Logic', '$ext_string')";
-        $db->query($sql2);
-
-				$sqlQuestion = "INSERT INTO Question (question_no, QA, type, single_or_multi, CA, title, Content,KeyboardNo, classification) VALUES ('$max_number', 'Q', 'LPICTURE', 'MULTI', '$CA', '$title', '$Q1', $KeyboardNumber, '$classification[0]')";
-        $db->query($sqlQuestion);
-        $db->close();
-
-        echo "<script>alert('出題成功'); location.href = 'MakeQuestion.php';</script>";
-    }
-
+    echo "<script>alert('出題成功'); location.href = 'MakeQuestion.php';</script>";
 
 
 

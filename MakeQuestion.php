@@ -260,7 +260,7 @@
                                 <label class="control-label col-md-3" for="last-name">題目附圖 : <span></span></label>
                                 <input type="file" name="Q1_file" accept="image/*,.wmf"/>
                             </div>
-			    <div class="form-group  sameline">
+			                      <div class="form-group  sameline">
                                 <label class="control-label col-md-3" for="last-name">題目附影片 : <span></span></label>
                                 <input type="file" name="Q1_video_file" accept="video/*,.m4a"/>
                             </div>
@@ -361,9 +361,6 @@
 
 
                     <!-- MAKE QUESTION w/ LOGIC ANSWER FORM IN WORD TAB -->
-
-
-
                     <div role="tabpanel" class="tab-pane fade" id="tab_content7" aria-labelledby="logic-word-tab">
 
                             <div class="form-horizontal form-label-left">
@@ -439,8 +436,27 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3" for="first-name">題目 :<span class="required"></span></label>
                                 <div class="col-md-5">
-                                    <input type="text"  name="Q1" required="required" placeholder="完整題目內文" class="form-control col-md-7 col-xs-12">
+                                    <input type="text"  name="Q1" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3" for="last-name">附加音檔 : </label>
+                              <div class="col-md-3">
+                                  <input type="file" name="audio_file"/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3" for="last-name">附加影片 : </label>
+                              <div class="col-md-3">
+                                  <input type="file" name="video_file" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3" for="last-name">題目附圖 : </label>
+                              <div class="col-md-3">
+                                <input type="file" name="Q1_file"/>
+                              </div>
                             </div>
 
                             <div class="form-group">
@@ -510,6 +526,24 @@
                                 <div class="col-md-5">
                                     <input type="text"  name="Q1" required="required" placeholder="完整題目內文" class="form-control col-md-7 col-xs-12">
                                 </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3" for="last-name">附加音檔 : </label>
+                              <div class="col-md-3">
+                                  <input type="file" name="audio_file"/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3" for="last-name">附加影片 : </label>
+                              <div class="col-md-3">
+                                  <input type="file" name="video_file" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3" for="last-name">題目附圖 : </label>
+                              <div class="col-md-3">
+                                <input type="file" name="Q1_file"/>
+                              </div>
                             </div>
 
                             <div class="form-group">

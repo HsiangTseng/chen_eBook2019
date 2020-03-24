@@ -261,57 +261,88 @@
 					<!-- 邏輯順序題的回答 -->
 					<script>
 						var audios = document.getElementsByTagName("audio");
-						var arrshow = [];
-						var arrvalue = [];
-						function show_order(value,id,placeholder){
-							if (document.getElementById(id).checked){
-								arrshow.push(placeholder);
-								arrvalue.push(value);
-							}
-							else{
-								for (var i = 0; i < arrshow.length; i++) {
-									if (arrshow[i] == placeholder) {
-										arrshow.splice(i, 1);
-										arrvalue.splice(i, 1);
-									}
-								}	
-							}
-							document.getElementById("hidden_value").value=arrvalue;
-							document.getElementById("input").value=arrshow.join(" ");							
-						}
-						
+                                                var arrshow = [];
+                                                var arrvalue = [];
+                                                var allAudios = document.querySelectorAll('audio');
+                                                var playaudio = new Audio();
+
+                                                function pause_audio(){
+                                                         playaudio.pause();
+                                                }
+
+                                                function pictureorder_and_audio(value,id,placeholder){
+                                                        var arrplaceholder = placeholder.split("-");
+                                                        picture_order(value,id,arrplaceholder[0]);
+                                                        play_audio(id,arrplaceholder[1]);
+                                                }
+
+                                                function showorder_and_audio(value,id,placeholder){
+                                                        var arrplaceholder = placeholder.split("-");
+                                                        show_order(value,id,arrplaceholder[0]);
+                                                        play_audio(id,arrplaceholder[1]);
+                                                }
+
+                                                function play_audio(id,placeholder){
+                                                        pause_audio();
+                                                        if(document.getElementById(id).checked){
+                                                                playaudio.src = placeholder;
+                                                                playaudio.play();
+                                                        }
+                                                }
+
+                                                function show_order(value,id,placeholder){
+                                                        pause_audio();
+                                                        if (document.getElementById(id).checked){
+                                                                arrshow.push(placeholder);
+                                                                arrvalue.push(value);
+                                                        }
+                                                        else{
+                                                                for (var i = 0; i < arrshow.length; i++) {
+                                                                        if (arrshow[i] == placeholder) {
+                                                                                arrshow.splice(i, 1);
+                                                                                arrvalue.splice(i, 1);
+                                                                        }
+                                                                }
+                                                        }
+                                                        document.getElementById("hidden_value").value=arrvalue;
+                                                        document.getElementById("input").value=arrshow.join(" ");
+                                                }
+
 						function picture_order(value,id,placeholder){
-						if (document.getElementById(id).checked){
-							var div_form = document.createElement("label");
-							div_form.setAttribute("class","col-md-2 col-xs-2 col-sm-2");
-							div_form.setAttribute("style","height:100%;")
-							newid = 'show' + id;
-							div_form.setAttribute("id",newid);
-							var lb = '<img class="show-img" src=upload/' + placeholder + '>';
-							div_form.innerHTML = lb;	
-							document.getElementById("input").appendChild(div_form);							
-							arrvalue.push(value);							
-						}
-						else{
-							newid = 'show' + id;
-							document.getElementById(newid).remove();
-							for (var i = 0; i < arrvalue.length; i++) {
-								if (arrvalue[i] == value) {
-									arrvalue.splice(i, 1);
-								}
-							}							
-						}
-						document.getElementById("hidden_value").value=arrvalue;
-						}
-						function pauseAll() {
-        						var self = this;
-						        [].forEach.call(audios, function (i) {
-								 i !== self && i.pause();
-						        })
-      						}
-						[].forEach.call(audios, function (i) {
-						        i.addEventListener("play", pauseAll.bind(i));
-					        })
+                                                        pause_audio();
+                                                if (document.getElementById(id).checked){
+                                                        var div_form = document.createElement("label");
+                                                        div_form.setAttribute("class","col-md-1 col-xs-1 col-sm-1");
+                                                        div_form.setAttribute("style","height:100%;")
+                                                        newid = 'show' + id;
+                                                        div_form.setAttribute("id",newid);
+                                                        var lb = '<img class="show-img" src=upload/' + placeholder + '>';
+                                                        div_form.innerHTML = lb;
+                                                        document.getElementById("input").appendChild(div_form);
+                                                        arrvalue.push(value);
+                                                }
+                                                else{
+                                                        newid = 'show' + id;
+                                                        document.getElementById(newid).remove();
+                                                        for (var i = 0; i < arrvalue.length; i++) {
+                                                                if (arrvalue[i] == value) {
+                                                                        arrvalue.splice(i, 1);
+                                                                }
+                                                        }
+                                                }
+                                                document.getElementById("hidden_value").value=arrvalue;
+                                                }
+                                                function pauseAll() {
+                                                        var self = this;
+                                                        [].forEach.call(audios, function (i) {
+                                                                 i !== self && i.pause();
+                                                        })
+                                                }
+                                                [].forEach.call(audios, function (i) {
+                                                        i.addEventListener("play", pauseAll.bind(i));
+                                                })
+
+
 					</script>	
 					
 					

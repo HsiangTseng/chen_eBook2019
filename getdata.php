@@ -85,23 +85,22 @@
 					echo "<div class='col-md-6 col-sm-6 col-xs-6 div50 test'>";
 					//聲音
 					if(!empty($result->audio)&&!is_null($result->audio)){
-						echo "<audio controls>";
-							echo "<source src='".$result->audio."' type='audio/mpeg'>";
-						echo "</audio>";
+						echo "<input type='radio' id='A".$i."' name='value[]' value='A".$i."' placeholder='".$result->audio."' onclick='play_audio(this.id,this.placeholder)'>";
+					}
+					else{
+						echo "<input type='radio' id='A".$i."' name='value[]' value='A".$i."' onclick='pause_audio()'>";
 					}
 					//圖片
 					if(!empty($result->picture_ext)&&!is_null($result->picture_ext)){
 							//有圖有文字
 							if(!empty($result->Content)&&!is_null($result->Content)){
-								echo "<input type='radio' id='A".$i."' name='value[]' value='A".$i."'>";
-									echo "<label for='A".$i."' class='square-button rwdtxt'>";
-										echo "<img class='small-img' src='upload/".$result->picture_ext."' >";															
-										echo "<p style='word-wrap:break-word;' class='show-text rwdtxt'>".$result->Content."</p>";
-									echo "</label>";
+								echo "<label for='A".$i."' class='square-button rwdtxt'>";
+									echo "<img class='small-img' src='upload/".$result->picture_ext."' >";															
+									echo "<p style='word-wrap:break-word;' class='show-text rwdtxt'>".$result->Content."</p>";
+								echo "</label>";
 							}
 							//有圖沒文字
 							else{
-								echo "<input type='radio' id='A".$i."' name='value[]' value='A".$i."'>";
 								echo "<label for='A".$i."' class='square-button rwdtxt'>";
 									echo "<img class='small-img' src='upload/".$result->picture_ext."' >";
 								echo "</label>";
@@ -109,8 +108,7 @@
 					}
 					//沒圖片文字
 					elseif(empty($result->picture_ext)||is_null($result->picture_ext)){
-						echo "<input type='radio' id='A".$i."' name='value[]' value='A".$i."' >";
-							echo "<label  for='A".$i."' style='word-wrap:break-word;' class='square-button rwdonlytxt'>".$result->Content."</label>";
+						echo "<label  for='A".$i."' style='word-wrap:break-word;' class='square-button rwdonlytxt'>".$result->Content."</label>";
 					}
 					echo "</div>";
 				}
@@ -123,23 +121,22 @@
 					echo "<div class='col-md-6 col-sm-6 col-xs-6 div50 test'>";
 					//聲音
 					if(!empty($result->audio)&&!is_null($result->audio)){
-						echo "<audio controls>";
-							echo "<source src='".$result->audio."' type='audio/mpeg'>";
-						echo "</audio>";
+						echo "<input type='checkbox' id='A".$i."' name='value[]' value='A".$i."' placeholder='".$result->audio."' onclick='play_audio(this.id,this.placeholder)'>";
+					}
+					else{						
+						echo "<input type='checkbox' id='A".$i."' name='value[]' value='A".$i."' onclick='pause_audio()'>";
 					}
 					//圖片
 					if(!empty($result->picture_ext)&&!is_null($result->picture_ext)){
 						//有圖有文字
 						if(!empty($result->Content)&&!is_null($result->Content)){
-							echo "<input type='checkbox' id='A".$i."' name='value[]' value='A".$i."'>";
-								echo "<label for='A".$i."' class='square-button rwdtxt'>";
-									echo "<img class='small-img' src='upload/".$result->picture_ext."' >";																
-									echo "<p style='word-wrap:break-word;' class='show-text rwdtxt'>".$result->Content."</p>";
-								echo "</label>";
+							echo "<label for='A".$i."' class='square-button rwdtxt'>";
+								echo "<img class='small-img' src='upload/".$result->picture_ext."' >";																
+								echo "<p style='word-wrap:break-word;' class='show-text rwdtxt'>".$result->Content."</p>";
+							echo "</label>";
 						}
 						//有圖沒文字
 						else{
-							echo "<input type='checkbox' id='A".$i."' name='value[]' value='A".$i."'>";
 							echo "<label for='A".$i."' class='square-button rwdtxt'>";
 								echo "<img class='small-img' src='upload/".$result->picture_ext."' >";
 							echo "</label>";
@@ -147,8 +144,7 @@
 					}
 					//沒圖片有文字
 					elseif(empty($result->picture_ext)||is_null($result->picture_ext)){
-						echo "<input type='checkbox' id='A".$i."' name='value[]' value='A".$i."' >";
-							echo "<label  for='A".$i."' style='word-wrap:break-word;' class='square-button rwdonlytxt'>".$result->Content."</label>";
+						echo "<label  for='A".$i."' style='word-wrap:break-word;' class='square-button rwdonlytxt'>".$result->Content."</label>";
 					}
 					echo "</div>";
 				}
