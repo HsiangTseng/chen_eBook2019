@@ -16,14 +16,6 @@
 		$max_number = $max_number+1;
 		//get the new question's number
 
-		$audio_ext_list="N";
-		if($number>=1)
-		{
-			for($i=1;$i<$number;$i++)
-			{
-				$audio_ext_list = $audio_ext_list.'-N';
-			}
-		}
 		/*echo 'Q-'.$max_number.'<br />';
 		echo 'T-'.$Title.'<br />';
 		echo 'Q-'.$Q1.'<BR />';
@@ -75,7 +67,7 @@
     //get the new question's number
 
 		$ext = array();
-
+		$audio_ext = array();
     for ($i=1; $i<=$number ; $i++ )
     {
     	$name = 'A'.$i.'_file';
@@ -88,7 +80,6 @@
 		  }
 			else {
 			}
-
       //---------WMF Covert to JPG--------------
       if($ext[$i]=="wmf")
       {
@@ -97,6 +88,17 @@
           $ext[$i]="jpg";
       }
       //---------WMF Covert to JPG--------------
+
+			$audio_name = 'Audio'.$i.'_file';
+			if ($_FILES[$audio_name]['error'] === UPLOAD_ERR_OK){
+		  $file = $_FILES[$audio_name]['tmp_name'];
+		  $audio_ext[$i] = end(explode('.', $_FILES[$audio_name]['name']));
+		  $dest = 'upload/K'.(string)$KeyboardNumber.$n.'.'.$audio_ext[$i];
+		  move_uploaded_file($file, $dest);
+		  }
+			else {
+				$audio_ext[$i] = 'N';
+			}
     }
 
     $ext_string = $ext[1];
@@ -104,8 +106,14 @@
     {
     	$ext_string = $ext_string.'-'.$ext[$i];
     }
+		$audio_ext_list = $audio_ext[1];
+		for($i=2;$i<=$number;$i++)
+		{
+			$audio_ext_list = $audio_ext_list.'-'.$audio_ext[$i];
+		}
 
 
+		//echo $audio_ext_list;
     $sql2 = "INSERT INTO Keyboard (KeyboardNo, type, ext, audio_ext) VALUES ('$KeyboardNumber', 'Logic', '$ext_string', '$audio_ext_list')";
     $db->query($sql2);
 

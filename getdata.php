@@ -40,34 +40,50 @@
 			$sql_catch_exam = "select * from Keyboard where KeyboardNo = '".$No_keyboard."'";
 			$result = mysqli_fetch_object($db->query($sql_catch_exam));
 
-
+			
 			if(strpos($quiz_type,'WORD')!== false){
-				$keyboard = $result->wordQuestion;
-				$Arr_text = explode("^&",$keyboard);
-				for( $i = 0 ; $i < count($Arr_text) ; $i++){
-						$answer_index = $i;
-						$answer_index+=1;
-						echo "<div class='col-md-2 col-sm-2 col-xs-2 div25'>";
-						  echo "<input type='checkbox' id='A".$answer_index."' name='value[]' value='A".$answer_index."' placeholder='".$Arr_text[$i]."' onclick='show_order(this.value,this.id,this.placeholder)'>";
-										echo "<label style='word-wrap:break-word;' class='square-button rwdtxt' for='A".$answer_index."'>".$Arr_text[$i]."</label>";
-						echo "</div>";
-				}
-			}
-			else{
-				$keyboard = $result->ext;
-				$Arr_img = explode("-",$keyboard);
-				for( $i = 0 ; $i < count($Arr_img) ; $i++){
-						$answer_index = $i;
-						$answer_index+=1;
-						echo "<div class='col-md-2 col-sm-2 col-xs-2 div25'>";
-								echo "<input type='checkbox' id='A".$answer_index."' name='value[]' value='A".$answer_index."' placeholder='K".$No_keyboard."A".$answer_index.".".$Arr_img[$i]."' onclick='picture_order(this.value,this.id,this.placeholder)'>";
-										echo "<label class='square-button rwdtxt' for='A".$answer_index."'>";
-												echo "<img class='small-img' src='upload/K".$No_keyboard."A".$answer_index.".".$Arr_img[$i]."'>";
-										echo "</label>";
-						echo "</div>";
-				}
-			}
-
+                                //catch_Keyboard_word
+                                $keyboard = $result->wordQuestion;
+                                $Arr_text = explode("^&",$keyboard);
+                                //catch_Keyboard_audio
+                                $keyboard_audio = $result->audio_ext;
+                                $Arr_audio = explode("-",$keyboard_audio);
+                                for( $i = 0 ; $i < count($Arr_text) ; $i++){
+                                        $answer_index = $i;
+                                        $answer_index+=1;
+                                        echo "<div class='col-md-2 col-sm-2 col-xs-2 div25'>";
+                                                if($Arr_audio[$i] != "N"){
+                                                        echo "<input type='checkbox' id='A".$answer_index."' name='value[]' value='A".$answer_index."' placeholder='".$Arr_text[$i]."-upload/K".$No_keyboard."A".$answer_index.".".$Arr_audio[$i]."' onclick='showorder_and_audio(this.value,this.id,this.placeholder)'>";
+                                                }
+                                                else{
+                                                        echo "<input type='checkbox' id='A".$answer_index."' name='value[]' value='A".$answer_index."' placeholder='".$Arr_text[$i]."' onclick='show_order(this.value,this.id,this.placeholder)'>";
+                                                }
+                                                        echo "<label style='word-wrap:break-word;' class='square-button rwdtxt' for='A".$answer_index."'>".$Arr_text[$i]."</label>";
+                                        echo "</div>";
+                                }
+                        }
+                        else{
+                                $keyboard = $result->ext;
+                                $Arr_img = explode("-",$keyboard);
+                                //catch_Keyboard_audio
+                                $keyboard_audio = $result->audio_ext;
+                                $Arr_audio = explode("-",$keyboard_audio);
+                                for( $i = 0 ; $i < count($Arr_img) ; $i++){
+                                        $answer_index = $i;
+                                        $answer_index+=1;
+                                        echo "<div class='col-md-2 col-sm-2 col-xs-2 div25'>";
+                                                if($Arr_audio[$i] != "N"){
+                                                        echo "<input type='checkbox' id='A".$answer_index."' name='value[]' value='A".$answer_index."' placeholder='upload/K".$No_keyboard."A".$answer_index.".".$Arr_img[$i]."-upload/K".$No_keyboard."A".$answer_index.".".$Arr_audio[$i]."' onclick='pictureorder_and_audio(this.value,this.id,this.placeholder)'>";
+                                                }
+                                                else{
+                                                        echo "<input type='checkbox' id='A".$answer_index."' name='value[]' value='A".$answer_index."' placeholder='upload/K".$No_keyboard."A".$answer_index.".".$Arr_img[$i]."' onclick='picture_order(this.value,this.id,this.placeholder)'>";
+                                                }
+                                                        echo "<label class='square-button rwdtxt' for='A".$answer_index."'>";
+                                                                echo "<img class='small-img' src='upload/K".$No_keyboard."A".$answer_index.".".$Arr_img[$i]."'>";
+                                                        echo "</label>";
+                                        echo "</div>";
+                                }
+                        }
 			echo "</div>";
 	}
 	

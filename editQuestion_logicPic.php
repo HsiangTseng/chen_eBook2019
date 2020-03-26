@@ -2,14 +2,6 @@
 
 <?php
 
-    session_start();
-
-    if($_SESSION['username'] == null)
-    {
-            header ('location: IRS_Login.php');
-            exit;
-    }
-
     $question_number = $_GET['number'];
 
 ?>
@@ -252,13 +244,26 @@
                         div_form.setAttribute("id",name);
 
 
-                        var lb = '<label class="control-label col-md-3" for="first-name">圖片' + pic_create_input_number +' :<span class="required"></span></label>';
-                        var md5 = '<div class="col-md-3">';
-                        var input_q =  '<input type="file" name="A'+pic_create_input_number+'_file" id="A'+pic_create_input_number+'_file"/>';
-                        var view = '<div class="thumbnail" style="border-style: outset; width:200px; height:200px; margin:0px auto;">'+
-                                          '<img id="img'+pic_create_input_number+'" src="" alt="">'+
-                                    '</div>';
-                        div_form.innerHTML = lb+md5+input_q+view;
+                        var img_lb =
+                        '<div class="form-group">'
+                          +'<label class="control-label col-md-3" for="first-name">圖片' + pic_create_input_number +' :<span class="required"></span></label>'
+                          +'<div class="col-md-9">'
+                            +'<input type="file" name="A'+pic_create_input_number+'_file"  />'
+                          +'</div>'
+                          +'<div class="thumbnail col-md-3" style="border-style: outset; width:200px; height:200px; margin:0px auto;">'
+                          + '<img id="img'+pic_create_input_number+'" src="" alt="">'
+                          +'</div>'
+                        +'</div>';
+
+                        var audio_lb =
+                        '<div class="form-group">'
+                          +'<label class="control-label col-md-3" for="first-name">附音檔' + pic_create_input_number +' :<span class="required"></span></label>'
+                          +'<div class="col-md-3">'
+                            +'<input type="file" name="Audio'+pic_create_input_number+'_file" />'
+                          +'</div>'
+                        +'</div>'
+                        +'<hr style="border-top: 2px dashed #2D99C8;" />';
+                        div_form.innerHTML = img_lb+audio_lb;
                         document.getElementById("messagePic").appendChild(div_form);
                         document.getElementById("picture_number").value=pic_create_input_number;
                         }
@@ -386,12 +391,6 @@
 
       </div>
     </div>
-
-
-
-
-
-
 
             <!-- jQuery -->
             <script src="../vendors/jquery/dist/jquery.min.js"></script>

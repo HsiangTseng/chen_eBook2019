@@ -549,7 +549,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3" for="first-name">正確順序 :<span class="required"></span></label>
                                 <div class="col-md-5">
-                                    <input type="text"  name="CA" placeholder="正解順序 例如: A1-A3-A2-A4" required="required" class="form-control col-md-7 col-xs-12">
+                                    <input type="text"  name="CA" placeholder="正解順序 例如: A1,A3,A2,A4" required="required" class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
 
@@ -574,11 +574,23 @@
                                     name = 'div_qpic'+pic_create_input_number;
                                     div_form.setAttribute("id",name);
 
+                                    var lb_all =
+                                    '<div class="form-group">'
+                                      +'<label class="control-label col-md-3" for="first-name">圖片' + pic_create_input_number +' :<span class="required"></span></label>'
+                                      +'<div class="col-md-3">'
+                                        +'<input type="file" name="A'+pic_create_input_number+'_file" required />'
+                                      +'</div>'
+                                    +'</div>'
+                                    +'<div class="form-group">'
+                                      +'<label class="control-label col-md-3" for="first-name">附音檔' + pic_create_input_number +' :<span class="required"></span></label>'
+                                      +'<div class="col-md-3">'
+                                        +'<input type="file" name="Audio'+pic_create_input_number+'_file" />'
+                                      +'</div>'
+                                    +'</div>'
+                                    +'<hr style="border-top: 2px dashed #2D99C8;" />';
 
-                                    var lb = '<label class="control-label col-md-3" for="first-name">圖片' + pic_create_input_number +' :<span class="required"></span></label>';
-                                    var md5 = '<div class="col-md-3">';
-                                    var input_q =  '<input type="file" name="A'+pic_create_input_number+'_file" required />';
-                                    div_form.innerHTML = lb+md5+input_q;
+
+                                    div_form.innerHTML = lb_all;
                                     document.getElementById("messagePic").appendChild(div_form);
                                     document.getElementById("picture_number").value=pic_create_input_number;
                                     }

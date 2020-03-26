@@ -418,7 +418,7 @@
               </div>
             </div>
             <div class="col-md-4" id="div_practice">
-              <div class="x_panel" style="height:25vh;">
+              <div class="x_panel" style="height:25vh;overflow:auto;">
                 <div class="x_title">
                   <h2><b>課堂練習</b></h2>
                   <div class="clearfix"></div>

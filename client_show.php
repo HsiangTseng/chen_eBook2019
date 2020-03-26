@@ -27,6 +27,7 @@
 
 <html lang="en" style="height:100%">
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<!-- Meta, title, CSS, favicons, etc. -->
 		<meta charset="utf-8">
@@ -316,7 +317,7 @@
                                                         div_form.setAttribute("style","height:100%;")
                                                         newid = 'show' + id;
                                                         div_form.setAttribute("id",newid);
-                                                        var lb = '<img class="show-img" src=upload/' + placeholder + '>';
+                                                        var lb = '<img class="show-img" src=' + placeholder + '>';
                                                         div_form.innerHTML = lb;
                                                         document.getElementById("input").appendChild(div_form);
                                                         arrvalue.push(value);
